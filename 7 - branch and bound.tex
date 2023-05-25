@@ -1,0 +1,60 @@
+\chapter{Branch and Bound}
+
+L'algoritmo Branch and Bound è un algoritmo di ottimizzazione che viene utilizzato per risolvere problemi di programmazione lineare intera (PLI) o di programmazione mista intera (PMI). Il suo funzionamento si basa su una strategia di divide et impera, che consiste nel suddividere il problema in sotto-problemi più piccoli e risolvibili più facilmente.
+
+L'algoritmo parte da una soluzione rilassata del problema di partenza, in cui le variabili intere vengono sostituite da variabili continue. Viene poi trovata una soluzione ottima per il problema rilassato, che viene utilizzata come limite inferiore per il problema di partenza.
+
+Successivamente, l'algoritmo crea un albero di decisione, in cui ogni nodo rappresenta un sotto-problema del problema di partenza. Il nodo radice rappresenta il problema di partenza, mentre i nodi figli rappresentano i sotto-problemi ottenuti dividendo il problema di partenza in due parti.
+
+Per ogni nodo dell'albero, l'algoritmo valuta la soluzione rilassata del sotto-problema corrispondente e confronta il suo valore con il limite inferiore ottenuto nella fase precedente. Se il valore della soluzione rilassata è maggiore del limite inferiore, il sotto-problema viene ulteriormente suddiviso in due parti e i due sotto-problemi creati vengono aggiunti all'albero di decisione come figli del nodo corrente.
+
+L'algoritmo continua a suddividere i sotto-problemi finché non riesce a trovare una soluzione ottima per il problema di partenza. Inoltre, l'algoritmo tiene traccia della soluzione migliore trovata finora, che può essere aggiornata man mano che vengono risolti i sotto-problemi.
+
+L'algoritmo Branch and Bound può essere utilizzato per risolvere una vasta gamma di problemi di ottimizzazione, come ad esempio problemi di scheduling, di routing, di allocazione di risorse, di progettazione di reti elettriche, di controllo di processi produttivi, di progettazione di impianti, ecc.
+
+\section{Upper bound e rilassamento}
+
+L'upper bound è il valore massimo che una soluzione ottima del problema di ottimizzazione intera può assumere. Può essere calcolato attraverso un rilassamento del problema in cui i vincoli di interezza sono temporaneamente rimossi, generando un problema di programmazione lineare continuo. La soluzione di questo problema di rilassamento fornisce un upper bound per il valore della soluzione ottima del problema di ottimizzazione intera. 
+
+Il rilassamento consiste nel sostituire i vincoli di interezza con i corrispondenti vincoli di non negatività. In altre parole, si permette alle variabili di assumere valori non interi e si risolve il problema ottenuto. La soluzione ottenuta fornisce un upper bound per la soluzione del problema originale. L'upper bound ottenuto tramite il rilassamento è in generale inferiore alla soluzione ottima del problema intero.
+Ecco l'algoritmo di Branch and Bound in formato LaTeX:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Problema di ottimizzazione $\mathcal{P}$}
+\KwOut{Soluzione ottima di $\mathcal{P}$}
+$\mathcal{L} \leftarrow \{\}$ \tcp*{Inizializzazione della lista dei nodi attivi}
+$x^* \leftarrow \text{null}$ \tcp*{Inizializzazione della soluzione ottima}
+$UB \leftarrow \infty$ \tcp*{Inizializzazione dell'upper bound}
+$\mathcal{L} \leftarrow [\text{problema di ottimizzazione originale}]$ \tcp*{Inserimento del nodo radice in $\mathcal{L}$}
+\While{$\mathcal{L} \neq \emptyset$}{
+    $P \leftarrow \text{prendi un nodo } P \text{ da } \mathcal{L}$\;
+    \eIf{$\text{valore minimo del rilassamento di } P > UB$}{
+        $\mathcal{L} \leftarrow \text{rimuovi } P \text{ da } \mathcal{L}$ \tcp*{Potatura per bound}
+    }{
+        \If{$P \text{ è un nodo foglia}$}{
+            \If{$\text{valore della soluzione di } P < UB$}{
+                $UB \leftarrow \text{valore della soluzione di } P$\;
+                $x^* \leftarrow \text{soluzione di } P$\;
+            }
+            $\mathcal{L} \leftarrow \text{rimuovi } P \text{ da } \mathcal{L}$ \tcp*{Potatura per completezza}
+        }
+        {
+            \tcp{Generazione dei figli di P}
+            \For{ogni possibile branching}{
+                \tcp{Creazione del nodo figlio}
+                $P' \leftarrow \text{crea nodo figlio di } P \text{ tramite il branching scelto}$\;
+                $\mathcal{L} \leftarrow \text{inserisci } P' \text{ in } \mathcal{L}$\;
+            }
+        }
+    }
+}
+\Return{$x^*$}
+\caption{Branch and Bound}
+\end{algorithm}
+
+Nell'algoritmo viene utilizzata una lista $\mathcal{L}$ di nodi attivi, inizializzata con il problema di ottimizzazione originale come nodo radice. Ad ogni iterazione viene selezionato un nodo $P$ dalla lista attiva e viene generata una lista di nodi figli mediante il branching. Questi nodi figli vengono inseriti nella lista attiva, che viene mantenuta ordinata in modo crescente rispetto al valore minimo del rilassamento del nodo. 
+
+In ogni iterazione, se il valore minimo del rilassamento di $P$ è maggiore dell'upper bound $UB$, il nodo viene eliminato dalla lista attiva (potatura per bound). Se $P$ è un nodo foglia, si verifica se la soluzione ottima trovata fino a quel momento può essere migliorata con la soluzione del nodo corrente. Se ciò è vero, l'upper bound e la soluzione ottima vengono aggiornati. Il nodo viene poi eliminato dalla lista attiva (potatura per completezza). 
+
+L

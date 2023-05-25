@@ -1,0 +1,113 @@
+\chapter{Programmazione dinamica}
+
+
+La programmazione dinamica è una tecnica di risoluzione di problemi che prevede di suddividere il problema in sottoproblemi più piccoli, risolvibili in modo indipendente, e di combinare le soluzioni dei sottoproblemi per ottenere la soluzione del problema originale.
+
+L'approccio si basa sulla costruzione di una tabella in cui le righe rappresentano i sottoproblemi e le colonne rappresentano i valori possibili delle variabili di stato. La tabella viene costruita in modo iterativo, partendo dai casi base e utilizzando i risultati dei sottoproblemi per riempire le celle della tabella.
+
+Il valore della soluzione ottima viene calcolato all'ultimo passaggio della tabella. L'uso della programmazione dinamica è particolarmente utile quando ci sono sovrapposizioni tra i sottoproblemi, cioè quando un sottoproblema viene risolto più volte.
+
+La complessità della programmazione dinamica dipende dal numero di sottoproblemi e dal tempo necessario per risolvere ciascun sottoproblema. In alcuni casi, la tecnica può essere migliorata utilizzando la memoization, ovvero memorizzando i risultati dei sottoproblemi già risolti per evitare di ricalcolarli ogni volta.
+
+In generale, la programmazione dinamica viene utilizzata per risolvere problemi di ottimizzazione in cui la soluzione ottima dipende dalla combinazione di un insieme di decisioni. Tra i problemi risolvibili con la programmazione dinamica si annoverano il problema dello zaino, il problema del commesso viaggiatore e il problema della catena di Markov.
+
+\section{Il principio di ottimalità}
+Il principio di ottimalità è un concetto fondamentale della programmazione dinamica. Esso afferma che una soluzione ottima a un problema di ottimizzazione globale può essere costruita attraverso le soluzioni ottime dei suoi sotto-problemi. In altre parole, se un problema può essere suddiviso in sotto-problemi più piccoli, la soluzione ottima del problema globale può essere ottenuta combinando le soluzioni ottime dei suoi sotto-problemi.
+
+Questo principio si applica quando si hanno problemi in cui la soluzione ottima di una istanza del problema contiene al suo interno la soluzione ottima di sotto-istanze del problema stesso. In questo caso, la soluzione del problema può essere ottenuta risolvendo le sotto-istanze e combinando le loro soluzioni in modo opportuno.
+
+L'utilizzo del principio di ottimalità permette di evitare di risolvere più volte lo stesso sotto-problema, riducendo così il tempo di calcolo e aumentando l'efficienza dell'algoritmo di programmazione dinamica.
+
+
+\section{Programmazione dinamica per il problema dello zaino}
+
+
+Si consideri il problema dello zaino in cui si ha a disposizione uno zaino di capacità $C$ e un insieme di $n$ oggetti. Ogni oggetto $i$ ha un peso $p_i$ e un valore $v_i$. Si vuole trovare la combinazione di oggetti che massimizza il valore totale, rispettando la capacità dello zaino.
+
+Definiamo $K(i, w)$ la soluzione ottima del problema dello zaino utilizzando i primi $i$ oggetti e uno zaino di capacità $w$. Il problema può essere risolto tramite programmazione dinamica utilizzando il principio di ottimalità.
+
+Il principio di ottimalità afferma che una soluzione ottima al problema dello zaino che considera i primi $i$ oggetti, è ottenuta considerando o l'oggetto $i$ o meno. Quindi, la soluzione ottima può essere ottenuta confrontando il valore massimo che si può ottenere considerando l'oggetto $i$ (e utilizzando uno zaino di capacità $w-p_i$) con il valore massimo che si può ottenere senza considerare l'oggetto $i$ (e utilizzando uno zaino di capacità $w$). Formalmente:
+
+\[
+K(i, w) = 
+\begin{cases} 
+0 & i = 0 \text{ o } w = 0 \\
+K(i-1, w) & p_i > w \\
+\max \{ K(i-1, w), K(i-1, w-p_i) + v_i \} & \text{altrimenti}
+\end{cases}
+\]
+
+La soluzione al problema dello zaino può essere trovata calcolando $K(n, C)$.
+
+Inoltre, è possibile utilizzare la programmazione dinamica per trovare la combinazione di oggetti che massimizza il valore totale. Dopo aver calcolato la matrice $K(i,w)$, si può risalire ai singoli oggetti utilizzati nella soluzione ottima tramite la seguente procedura:
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwResult{Oggetti utilizzati nella soluzione ottima}
+$i \leftarrow n$\;
+$w \leftarrow C$\;
+\While{$i > 0$}{
+  \If{$K(i,w) \neq K(i-1,w)$}{
+    Utilizza l'oggetto $i$\;
+    $w \leftarrow w - p_i$\;
+  }
+  $i \leftarrow i - 1$\;
+}
+\caption{Procedura per ottenere gli oggetti utilizzati nella soluzione ottima}
+\end{algorithm}
+
+
+\section{Che cos'è l'algoritmo valore ottimo?}
+
+L'algoritmo valore ottimo (in inglese \textit{Value Iteration}) è un algoritmo di programmazione dinamica utilizzato per trovare la politica ottima in un processo decisionale di Markov a tempo discreto (MDP). L'algoritmo è basato sull'iterazione dei valori e utilizza una procedura di backup dei valori per aggiornare il valore di ogni stato.
+
+L'idea alla base dell'algoritmo valore ottimo è quella di trovare la funzione valore ottimo $V^*(s)$ di ogni stato $s$ del MDP. Questa funzione indica il valore atteso della ricompensa totale che si può ottenere partendo dallo stato $s$ e seguendo la politica ottima. L'algoritmo itera la stima della funzione valore ottimo fino a raggiungere una convergenza. Alla fine di ogni iterazione, l'algoritmo aggiorna la funzione valore ottimo di ogni stato sulla base del valore atteso dei suoi successori.
+
+L'algoritmo valore ottimo è un metodo molto efficace per risolvere MDPs di grandi dimensioni, tuttavia richiede la conoscenza completa del modello del sistema, ovvero delle probabilità di transizione e delle ricompense associate ad ogni transizione.
+
+
+\subsection{Applicato a KNAPSACK}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Un insieme di $n$ oggetti, dove ogni oggetto $i$ ha un valore $v_i$ e un peso $w_i$, e una capacità massima dello zaino $W$}
+\KwOut{Il valore massimo che può essere ottenuto con una combinazione di oggetti che non superi la capacità $W$}
+
+$A \gets$ array $n \times (W+1)$ inizializzato a 0\;
+
+\For{$i \gets 1$ \KwTo $n$}{
+    \For{$w \gets 1$ \KwTo $W$}{
+        \eIf{$w_i \leq w$}{
+            $A[i, w] \gets \max\{A[i-1, w], A[i-1, w-w_i]+v_i\}$\;
+        }{
+            $A[i, w] \gets A[i-1, w]$\;
+        }
+    }
+}
+\Return{$A[n, W]$}
+\caption{Algoritmo valore ottimo per il problema dello zaino}
+\label{alg:valore-ottimo-zaino}
+\end{algorithm}
+
+In questo algoritmo, si utilizza una matrice $A$ di dimensioni $n \times (W+1)$ per memorizzare i valori ottimi per tutti i sottoproblemi del problema dello zaino, ovvero il valore massimo che può essere ottenuto con una combinazione di oggetti che non superi una capacità $w \leq W$ e che includa solo i primi $i$ oggetti.
+
+L'algoritmo utilizza una doppia iterazione sui primi $i$ oggetti e sulle capacità $w$. Se l'oggetto $i$ ha peso $w_i$ minore o uguale alla capacità $w$ considerata, allora è possibile scegliere se includere o meno l'oggetto $i$ nella combinazione. Se si decide di includerlo, il valore massimo ottenibile è dato dalla somma del valore dell'oggetto $i$ e del valore massimo ottenibile con i primi $i-1$ oggetti e una capacità residua di $w-w_i$. Altrimenti, il valore massimo ottenibile è dato dal valore massimo ottenibile con i primi $i-1$ oggetti e la capacità $w$ considerata.
+
+Alla fine delle iterazioni, il valore ottimo per il problema originale, ovvero la combinazione di oggetti con valore massimo che non superi la capacità $W$, è dato dall'elemento $A[n, W]$ della matrice.
+
+\section{Problema della schedulazione}
+
+Il \textbf{problema della schedulazione} consiste nell'assegnare un insieme di \textit{n} attività da eseguire, ognuna delle quali richiede un certo tempo di elaborazione, a un insieme di \textit{m} risorse, ciascuna delle quali ha una certa disponibilità. L'obiettivo è minimizzare il tempo totale di completamento delle attività.
+
+Formalmente, il problema può essere definito come segue:
+
+Dati:
+\begin{itemize}
+    \item Un insieme di \textit{n} attività $A = \{a_1, a_2, ..., a_n\}$.
+    \item Un insieme di \textit{m} risorse $R = \{r_1, r_2, ..., r_m\}$.
+    \item Un tempo di elaborazione $p_{ij}$ per eseguire l'attività $a_i$ sulla risorsa $r_j$.
+    \item Una disponibilità $d_j$ per ogni risorsa $r_j$.
+\end{itemize}
+Obiettivo: Trovare un assegnamento delle attività alle risorse che minimizzi il tempo totale di completamento.
+
+Il problema della schedulazione può essere formulato in diverse varianti, come ad esempio il problema della schedulazione su una singola macchina o il problema della schedulazione su più macchine. In generale, il problema è considerato \textit{NP-hard}, il che significa che non esiste un algoritmo efficiente in grado di risolverlo in tempo polinomiale per tutti i casi.

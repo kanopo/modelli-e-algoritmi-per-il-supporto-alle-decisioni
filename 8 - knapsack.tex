@@ -1,0 +1,58 @@
+\chapter{Problema KNAPSACK}
+Il problema dello zaino (in inglese, knapsack problem) è un problema di ottimizzazione combinatoria. Si supponga di avere uno zaino con una capacità massima e una serie di oggetti, ognuno dei quali ha un determinato valore e un certo peso. Lo scopo è riempire lo zaino con gli oggetti in modo da massimizzare il valore totale degli oggetti, rispettando la capacità massima dello zaino.
+
+Formalmente, il problema può essere definito come segue: dati n oggetti con un valore $v_i$ e un peso $w_i$ per $i = 1,...,n$ e una capacità massima $W$ dello zaino, trovare una combinazione di oggetti che massimizzi il valore totale degli oggetti, rispettando la capacità massima dello zaino. In altre parole, si cerca di trovare una soluzione x, dove $x_i \in \{0,1\}$ rappresenta se l'oggetto i è incluso o meno nello zaino, tale che
+
+$$\sum_{i=1}^n w_i x_i \le W$$
+$$\max \sum_{i=1}^n v_i x_i$$
+
+dove $\sum_{i=1}^n w_i x_i \le W$ rappresenta il vincolo sulla capacità dello zaino.
+
+Il problema dello zaino è un problema di ottimizzazione combinatoria NP-completo, il che significa che non esiste un algoritmo che possa risolvere il problema in un tempo polinomiale in base alla dimensione dell'input. Tuttavia, esistono algoritmi efficienti per risolvere il problema in alcuni casi particolari, come quando tutti i pesi e i valori degli oggetti sono interi positivi.
+
+\section{Brach and bound per KNAPSACK}
+L'algoritmo di branch and bound applicato al problema dello zaino (knapsack problem) prevede i seguenti passi:
+\begin{enumerate}
+  
+\item Inizializzazione: si parte dalla soluzione vuota e si calcola l'upper bound (UB) iniziale come la soluzione ottenuta con il rilassamento continuo del problema.
+\item Branching: si seleziona un elemento non ancora selezionato e si generano due sotto-problemi, uno in cui l'elemento viene inserito nello zaino e uno in cui non viene inserito. Per ogni sotto-problema, si calcola l'upper bound e si scarta il sotto-problema se l'upper bound è minore della migliore soluzione trovata finora.
+\item Selezione del sotto-problema: si seleziona il sotto-problema con l'upper bound più alto tra quelli non ancora scartati e si ripete il processo dal passo 2.
+\item Terminazione: l'algoritmo termina quando tutti i sotto-problemi sono stati esplorati o quando non ci sono più sotto-problemi con un upper bound maggiore della migliore soluzione trovata finora.
+
+\end{enumerate}
+Durante l'esplorazione dell'albero dei sotto-problemi, l'upper bound viene calcolato come la somma dei valori degli elementi già selezionati e del valore massimo che si può ancora ottenere con gli elementi rimanenti, tenendo conto del limite di peso dello zaino.
+
+La soluzione ottimale viene ottenuta quando l'algoritmo termina e restituisce la migliore soluzione trovata finora.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Array di $n$ oggetti con peso $p_i$ e valore $v_i$, capacità dello zaino $W$}
+\KwOut{Valore massimo che si può ottenere riempiendo lo zaino}
+\textbf{inizializzazione:} $u \gets 0, LB \gets 0, x \gets \vec{0}, j \gets 1, z \gets 0$ \\
+$\mathrm{Heap}:$ tutti i nodi sono presenti nel heap con $LB$ come chiave \\
+\While{Heap non vuoto}{
+    $N \gets$ nodo con il valore minimo di $LB$ \\
+    \If{$LB \geq u$}{
+        \textbf{return} $u$
+    }
+    $i \gets$ livello di profondità del nodo $N$ \\
+    \If{$i>n$}{
+        \textbf{continue}
+    }
+    \If{$z+v_i \leq u$}{
+        \textbf{continue}
+    }
+    \textbf{crea} il figlio sinistro $S$ del nodo $N$ mettendo nell'array $x$ il valore 0 per l'oggetto $i$ \\
+    \textbf{crea} il figlio destro $D$ del nodo $N$ mettendo nell'array $x$ il valore 1 per l'oggetto $i$ \\
+    \textbf{calcola} il lower bound $LB_S$ del figlio sinistro $S$ \\
+    \textbf{calcola} il lower bound $LB_D$ del figlio destro $D$ \\
+    \If{$LB_S < u$}{
+        \textbf{inserisci} $S$ nel heap con $LB_S$ come chiave
+    }
+    \If{$LB_D < u$}{
+        \textbf{inserisci} $D$ nel heap con $LB_D$ come chiave
+    }
+}
+\textbf{return} $u$
+\caption{Algoritmo Branch and Bound per il problema dello zaino (Knapsack)}
+\end{algorithm}

@@ -1,0 +1,49 @@
+
+\chapter{Minimum Spanning Tree}
+
+
+I problemi di MST(Minimum Spanning Tree o alberi di supporto a peso minimo), dato un grafo non orientato con pesi sugli archi, si vuole 
+determinare tra gli alberi di supporto del grafo quello a peso minimo.
+
+\section{Algoritmo greedy per MST}
+
+
+\begin{enumerate}
+  \item Si ordinano tutti gli archi del grafo in ordine crescente del peso.
+  \item Si pone $E_T = \emptyset$ ($E_T$ è l'insieme degli archi dell'albero di supporto) e $k = 1$
+  \item Se $E_T = V - 1$, STOP e si restituisce l'albero $T = (V, E_T)$ altrimenti proseguo
+  \item Se l'arco $e_k$ non forma cicli con gli archi in $E_T$ lo aggiungo agli archi $E_T$, altrimenti lo scarto
+  \item Pongo $k = k + 1$ e torno al passo 3
+\end{enumerate}
+
+
+\subsection{Correttezza dell'algoritmo}
+
+Non è detto che l'algoritmo greedy restituisca l'MST.
+
+\subsection{Complessità dell'algoritmo}
+
+L'operazione più costosa dell'algoritmo è quella di ordinare gli archi in ordine crescente di peso.
+
+Se siamo in presenza di un grafo denso, la complessità diventa $O(|E| \log(|E|))$, dove $|E|$ è il numero di archi.
+
+
+\section{Vedere su yt gli algoritmi MST1 e MST2}
+perche il prof li spiega leggermente male, come quasi tutto questo corso.
+
+
+
+\section{Shortest path}
+
+Nei problemi di cammino a costo minimo, dadto un grafo $G=(V,A)$ con costo (distanza) $d_{ij}$ per ogni 
+$(i, j) \in A$ e dati due nodi $s, t \in V$ dove i due nodi sono diversi fra di loro, vogliamo individuare un cammino
+elementare orientato da $s$ a $t$ di costo minomo.
+
+\subsection{Algoritmo di Dijkstra}
+Valido solo se $d_{ij} \geq 0 \forall (i, j) \in A$.
+Restituisce i cammini minimi tra un nodo scelto $s \in V$ e tutti gli altri nodi.
+
+\subsection{Algoritmo di Floyd-Warshall}
+Valido anche per distanze negative a patto che non siano presenti cicli a costo negativo(in questo caso restituisce un ciclo a costo negativo).
+
+

@@ -1,0 +1,66 @@
+\documentclass{report}
+
+% ----------------------------------------------------
+% PACKAGE
+% ----------------------------------------------------
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage[a4paper, portrait, margin=0.75in]{geometry}
+\usepackage[italian]{babel}
+\usepackage{enumerate}% http://ctan.org/pkg/enumerate
+
+\usepackage{tcolorbox} % usato per fare le box colorate
+\usepackage{soul} % usato per barrare il testo
+% \usepackage{algorithm} % usato per scrivere algoritmi
+\usepackage{algpseudocode}
+\usepackage{algorithm2e}
+\usepackage{tikz}
+\usepackage{listings}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  breaklines=true,
+  frame=single,
+  captionpos=b,
+  showstringspaces=false,
+  tabsize=2
+}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    urlcolor=blue,
+}
+
+\title{Modelli e algoritmi per il supporto delle decisioni \\[1ex] \large Un goliardico riassunto}
+\author{Ollari Dmitri}
+
+\begin{document}
+    \maketitle
+
+    \tableofcontents
+    % \listoffigures
+
+    \include{1 - introduzione ai modelli.tex}
+    \include{2 - grafi.tex}
+    % \include{3 - mst.tex}
+    % \include{4 - matching.tex}
+    % \include{5 - problemi di flusso a costo minimo.tex}
+    % \include{6 - assegnamento.tex}
+    % \include{7 - branch and bound.tex}
+    % \include{8 - knapsack.tex}
+    % \include{9 - programmazione dinamica.tex}
+    % \include{10 - problema di ottimizazione.tex}
+
+
+    
+\end{document}
