@@ -1,49 +1,192 @@
-
 \chapter{Minimum Spanning Tree}
 
+Un Minimum Spanning Tree (MST), tradotto in italiano come Albero di Supporto Minimo, è un albero di supporto di peso minimo in un grafo non diretto e connesso. L'MST è costituito da un sottoinsieme di archi del grafo che connette tutti i nodi in modo tale che il peso totale degli archi sia il più basso possibile.
 
-I problemi di MST(Minimum Spanning Tree o alberi di supporto a peso minimo), dato un grafo non orientato con pesi sugli archi, si vuole 
-determinare tra gli alberi di supporto del grafo quello a peso minimo.
+Le caratteristiche principali degli MST sono:
+
+\begin{enumerate}
+    \item \textbf{Connessione}: Un MST deve connettere tutti i nodi del grafo, garantendo che non ci siano nodi isolati.
+    \item \textbf{Aciclicità}: Un MST non deve contenere cicli, quindi non può avere archi che creano loop all'interno dell'albero.
+    \item \textbf{Peso minimo}: Un MST ha il peso totale degli archi più basso possibile tra tutti gli alberi che soddisfano le prime due caratteristiche.
+\end{enumerate}
+
+Gli MST hanno diverse applicazioni pratiche, tra cui:
+
+\begin{itemize}
+    \item Reti di comunicazione: Un MST può essere utilizzato per collegare un insieme di punti in una rete di comunicazione minimizzando il costo totale dei collegamenti.
+    \item Progettazione di reti stradali: Gli MST possono essere utilizzati per pianificare reti stradali efficienti, dove gli archi rappresentano le strade e il peso degli archi può essere la distanza o il tempo di percorrenza.
+    \item Analisi dei dati: Gli MST possono essere utilizzati per individuare le relazioni più rilevanti o significative tra i dati, ad esempio nella visualizzazione delle relazioni tra punti di dati su una mappa.
+\end{itemize}
+
 
 \section{Algoritmo greedy per MST}
+L'algoritmo greedy per MST (Minimum Spanning Tree) è un approccio basato sulla selezione di archi in base al loro peso. L'idea principale è quella di selezionare ripetutamente l'arco di peso minimo che collega un nodo dell'MST esistente a un nodo non ancora raggiunto, finché non viene creato un albero che connette tutti i nodi del grafo.
+
 
 
 \begin{enumerate}
-  \item Si ordinano tutti gli archi del grafo in ordine crescente del peso.
-  \item Si pone $E_T = \emptyset$ ($E_T$ è l'insieme degli archi dell'albero di supporto) e $k = 1$
-  \item Se $E_T = V - 1$, STOP e si restituisce l'albero $T = (V, E_T)$ altrimenti proseguo
-  \item Se l'arco $e_k$ non forma cicli con gli archi in $E_T$ lo aggiungo agli archi $E_T$, altrimenti lo scarto
-  \item Pongo $k = k + 1$ e torno al passo 3
+  
+  \item Inizializzazione: Parti da un grafo non diretto e connesso $G = (V, E)$, dove $V$ rappresenta l'insieme dei nodi e $E$ rappresenta l'insieme degli archi. Crea un insieme vuoto MST che conterrà gli archi dell'albero di supporto minimo.
+  \item Seleziona un nodo di partenza arbitrario. Questo può essere fatto in modo casuale o seguendo una strategia specifica, ad esempio selezionando il primo nodo dell'insieme dei nodi.
+  \item Finché non sono stati raggiunti tutti i nodi:
+    \begin{enumerate}
+      \item Seleziona l'arco di peso minimo che collega un nodo nell'MST esistente a un nodo non ancora raggiunto. Questo arco deve essere selezionato tra gli archi che collegano il nodo raggiunto all'esterno dell'MST.
+      \item Aggiungi l'arco selezionato all'MST.
+      \item Marca il nodo raggiunto come "visitato" o "raggiunto".
+    \end{enumerate}
+  \item Alla fine del processo, l'MST conterrà tutti gli archi necessari per connettere tutti i nodi del grafo in modo che il peso totale dell'MST sia minimo.
 \end{enumerate}
+L'algoritmo greedy per MST può essere implementato utilizzando diverse strutture dati, come ad esempio una coda di priorità (heap) per selezionare l'arco di peso minimo in modo efficiente.
+
+Ecco un esempio di implementazione dell'algoritmo greedy per MST in Python:
+
+\begin{lstlisting}
+  
+def greedy_mst(graph):
+    mst = []  # Insieme di archi dell'MST
+    visited = set()  # Insieme di nodi visitati
+    start_node = list(graph.keys())[0]  # Nodo di partenza arbitrario
+    
+    visited.add(start_node)
+    
+    while len(visited) < len(graph):
+        min_weight = float('inf')
+        min_edge = None
+        
+        # Scansiona gli archi collegati ai nodi visitati
+        for node in visited:
+            for neighbor, weight in graph[node]:
+                if neighbor not in visited and weight < min_weight:
+                    min_weight = weight
+                    min_edge = (node, neighbor)
+        
+        if min_edge:
+            mst.append(min_edge)
+            visited.add(min_edge[1])
+    
+    return mst
+\end{lstlisting}
+
+Questo è solo un esempio di implementazione e può variare a seconda delle specifiche del problema. Assicurati di adattare l'algoritmo in base alle tue esigenze specifiche.
+
+\subsection{Correttezza algoritmo}
 
 
-\subsection{Correttezza dell'algoritmo}
+La complessità dell'algoritmo greedy per MST dipende dalla rappresentazione del grafo e dalla struttura dati utilizzata.
 
-Non è detto che l'algoritmo greedy restituisca l'MST.
+Assumendo che il grafo sia rappresentato come una lista di adiacenza, con $n$ nodi e $m$ archi, e che si utilizzi una coda di priorità (heap) per selezionare l'arco di peso minimo, la complessità dell'algoritmo è:
 
-\subsection{Complessità dell'algoritmo}
+\begin{itemize}
+    \item Inizializzazione: $O(n)$
+    \item Ciclo principale: $O(m \log m)$
+\end{itemize}
 
-L'operazione più costosa dell'algoritmo è quella di ordinare gli archi in ordine crescente di peso.
+All'interno del ciclo principale, l'estrazione dell'arco di peso minimo richiede un'operazione di estrazione minima dalla coda di priorità, che ha una complessità di $O(\log m)$. Il ciclo principale viene eseguito $m$ volte.
 
-Se siamo in presenza di un grafo denso, la complessità diventa $O(|E| \log(|E|))$, dove $|E|$ è il numero di archi.
+Quindi, la complessità complessiva dell'algoritmo greedy per MST è $O(n + m \log m)$.
 
-
-\section{Vedere su yt gli algoritmi MST1 e MST2}
-perche il prof li spiega leggermente male, come quasi tutto questo corso.
-
-
-
-\section{Shortest path}
-
-Nei problemi di cammino a costo minimo, dadto un grafo $G=(V,A)$ con costo (distanza) $d_{ij}$ per ogni 
-$(i, j) \in A$ e dati due nodi $s, t \in V$ dove i due nodi sono diversi fra di loro, vogliamo individuare un cammino
-elementare orientato da $s$ a $t$ di costo minomo.
-
-\subsection{Algoritmo di Dijkstra}
-Valido solo se $d_{ij} \geq 0 \forall (i, j) \in A$.
-Restituisce i cammini minimi tra un nodo scelto $s \in V$ e tutti gli altri nodi.
-
-\subsection{Algoritmo di Floyd-Warshall}
-Valido anche per distanze negative a patto che non siano presenti cicli a costo negativo(in questo caso restituisce un ciclo a costo negativo).
+È importante notare che se il grafo viene rappresentato come una matrice di adiacenza invece di una lista di adiacenza, la complessità può essere diversa, ad esempio $O(n^2)$ per la ricerca dell'arco di peso minimo.
+\subsection{Complessit\'a dell'algoritmo}
 
 
+
+
+
+
+\section{Algoritmo MST-1 - Prim}
+(Penso sia l'algoritmo di Prim ma al prof piace inventarsi della roba a caso)
+
+% \begin{enumerate}
+%   \item Scegli un vertice arbitrario come vertice di partenza per l'MST.
+%   \item Segui i passaggi da 3 a 5 finché ci sono vertici che non sono inclusi nell'MST (chiamati vertici di confine).
+%   \item Trova gli archi che collegano qualsiasi vertice dell'albero con i vertici di confine.
+%   \item Trova l'arco di peso minimo tra questi archi.
+%   \item Aggiungi l'arco scelto all'MST se non forma un ciclo.
+%   \item Restituisci l'MST e termina.
+% \end{enumerate}
+%
+
+\begin{center}
+\begin{tikzpicture}[auto,node distance=2.5cm]
+    \node (A) {A};
+    \node (B) [below left of=A] {B};
+    \node (C) [below right of=A] {C};
+    \node (D) [below right of=B] {D};
+    \node (E) [right of=C] {E};
+    \node (F) [below right of=E] {F};
+    \node (G) [below left of=F] {G};
+
+    \path (A) edge node {2} (B)
+              edge node {5} (C)
+          (B) edge node {1} (D)
+              edge node {3} (C)
+          (C) edge node {2} (D)
+              edge node {4} (E)
+          (D) edge node {3} (F)
+          (E) edge node {1} (F)
+          (F) edge node {2} (G);
+\end{tikzpicture}\end{center}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%
+% \chapter{Minimum Spanning Tree}
+%
+%
+% I problemi di MST(Minimum Spanning Tree o alberi di supporto a peso minimo), dato un grafo non orientato con pesi sugli archi, si vuole 
+% determinare tra gli alberi di supporto del grafo quello a peso minimo.
+%
+% \section{Algoritmo greedy per MST}
+%
+%
+% \begin{enumerate}
+%   \item Si ordinano tutti gli archi del grafo in ordine crescente del peso.
+%   \item Si pone $E_T = \emptyset$ ($E_T$ è l'insieme degli archi dell'albero di supporto) e $k = 1$
+%   \item Se $E_T = V - 1$, STOP e si restituisce l'albero $T = (V, E_T)$ altrimenti proseguo
+%   \item Se l'arco $e_k$ non forma cicli con gli archi in $E_T$ lo aggiungo agli archi $E_T$, altrimenti lo scarto
+%   \item Pongo $k = k + 1$ e torno al passo 3
+% \end{enumerate}
+%
+%
+% \subsection{Correttezza dell'algoritmo}
+%
+% Non è detto che l'algoritmo greedy restituisca l'MST.
+%
+% \subsection{Complessità dell'algoritmo}
+%
+% L'operazione più costosa dell'algoritmo è quella di ordinare gli archi in ordine crescente di peso.
+%
+% Se siamo in presenza di un grafo denso, la complessità diventa $O(|E| \log(|E|))$, dove $|E|$ è il numero di archi.
+%
+%
+% \section{Vedere su yt gli algoritmi MST1 e MST2}
+% perche il prof li spiega leggermente male, come quasi tutto questo corso.
+%
+%
+%
+% \section{Shortest path}
+%
+% Nei problemi di cammino a costo minimo, dadto un grafo $G=(V,A)$ con costo (distanza) $d_{ij}$ per ogni 
+% $(i, j) \in A$ e dati due nodi $s, t \in V$ dove i due nodi sono diversi fra di loro, vogliamo individuare un cammino
+% elementare orientato da $s$ a $t$ di costo minomo.
+%
+% \subsection{Algoritmo di Dijkstra}
+% Valido solo se $d_{ij} \geq 0 \forall (i, j) \in A$.
+% Restituisce i cammini minimi tra un nodo scelto $s \in V$ e tutti gli altri nodi.
+%
+% \subsection{Algoritmo di Floyd-Warshall}
+% Valido anche per distanze negative a patto che non siano presenti cicli a costo negativo(in questo caso restituisce un ciclo a costo negativo).
+%
+%
