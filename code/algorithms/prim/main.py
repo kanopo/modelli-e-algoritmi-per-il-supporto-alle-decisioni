@@ -53,8 +53,8 @@ def mst_prim(graph: nx.Graph):
 if __name__ == '__main__':
     with open("README.md", "w") as f:
 
-        f.write("# Esercizio MST\n")
-        f.write("Implementazione dell'algoritmo Prim per risolvere gli esercizi di MST\n")
+        f.write("# Esercizio MST\n\n\n")
+        f.write("Implementazione dell'algoritmo Prim per risolvere gli esercizi di MST\n\n\n")
 
 
         G = nx.Graph()
@@ -67,9 +67,9 @@ if __name__ == '__main__':
         G.add_edge(3, 5, weight=1)
         G.add_edge(4, 5, weight=3)
 
-        f.write("Grafo di partenza: \n")
+        f.write("Grafo di partenza: \n\n\n")
         for edge in G.edges(data=True):
-            f.write(str(edge) + "\n")
+            f.write(str(edge) + "\n\n\n")
 
 
 
@@ -96,15 +96,15 @@ if __name__ == '__main__':
 
 
         plt.clf()
-        f.write("![Graph](./graph.png)\n")
+        f.write("![Graph](./graph.png)\n\n\n")
 
 
         # PRIM ALGORITHM
         mst_graph = mst_prim(graph=G)
 
-        f.write("MST: \n")
+        f.write("MST: \n\n\n")
         for edge in mst_graph.edges(data=True):
-            f.write(str(edge) + "\n")
+            f.write(str(edge) + "\n\n\n")
 
 
         pos = nx.spring_layout(mst_graph, seed=7)  # positions for all nodes - seed for reproducibility
@@ -127,7 +127,7 @@ if __name__ == '__main__':
         plt.savefig("mst_graph.png")
         plt.show()
 
-        f.write("![MST Graph](./mst_graph.png)\n")
+        f.write("![MST Graph](./mst_graph.png)\n\n\n")
 
 
         f.close()
