@@ -1,10 +1,9 @@
 import networkx as nx
 # import matplotlib
-
-#WARN: change matplotlib backend to show image on linux 
-
 # matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import random
+import markdown
 
 
 
@@ -15,27 +14,137 @@ import matplotlib.pyplot as plt
 Implementazione dell'algoritmo Prim per risolvere gli esercizi di MST
 """
 
-def mst_prim():
-    pass
+def mst_prim(graph: nx.Graph):
+
+    mst = nx.Graph()
+
+    REMAINING_NODES = len(graph.nodes())
+
+    visited = set()
+
+    random_node_index = random.randint(0, len(graph.nodes()) - 1)
+
+    start = list(graph.nodes())[random_node_index]
+    print("Partenza: ", start)
+
+    visited.add(start)
+
+    while REMAINING_NODES > 0:
+
+        min_weight = float("inf")
+        min_edge = -1
+
+        for node in visited:
+            for edge in graph.edges(node):
+                # perche (nodo_partenza, nodo_arrivo, peso)
+                if edge[1] not in visited:
+                    if graph.edges[edge]["weight"] < min_weight:
+                        min_weight = graph.edges[edge]["weight"]
+                        min_edge = edge
+
+
+        if min_edge == -1:
+            break
+
+        else:
+
+            visited.add(min_edge[1])
+            mst.add_edge(min_edge[0], min_edge[1], weight=min_weight)
+            REMAINING_NODES -= 1
+
+
+
+    print("MST: ", mst.edges(data=True))
+    return mst
+
 
 
 if __name__ == '__main__':
+    with open("README.md", "w") as f:
 
-    G = nx.Graph()
-
-    G.add_edge("A", "B", weight=2)
-    G.add_edge("A", "C", weight=3)
-    G.add_edge("B", "C", weight=1)
-    G.add_edge("B", "D", weight=1)
-    G.add_edge("C", "D", weight=2)
-    G.add_edge("C", "E", weight=1)
-    G.add_edge("D", "E", weight=3)
-    G.add_edge("D", "F", weight=1)
-    G.add_edge("E", "F", weight=2)
+        f.write("# Esercizio MST\n")
+        f.write("Implementazione dell'algoritmo Prim per risolvere gli esercizi di MST\n")
 
 
-    nx.draw_spring(G, with_labels=True)
-    plt.show()
+        PRINT_GRAPH = False
+        G = nx.Graph()
 
+        G.add_edge(0, 2, weight=2)
+        G.add_edge(1, 3, weight=3)
+        G.add_edge(2, 3, weight=1)
+        G.add_edge(2, 4, weight=1)
+        G.add_edge(3, 4, weight=2)
+        G.add_edge(3, 5, weight=1)
+        G.add_edge(4, 5, weight=3)
+
+        f.write("Grafo di partenza: \n")
+        for edge in G.edges(data=True):
+            f.write(str(edge) + "\n")
+
+
+
+
+        if PRINT_GRAPH:
+            pos = nx.spring_layout(G, seed=7)  # positions for all nodes - seed for reproducibility
+            # nodes
+            nx.draw_networkx_nodes(G, pos, node_size=500)
+
+            # edges
+            nx.draw_networkx_edges(G, pos, edgelist=G.edges(), width=6)
+
+            # labels
+            nx.draw_networkx_labels(G, pos, font_size=20, font_family="sans-serif")
+
+            # edge labels
+            labels = nx.get_edge_attributes(G, "weight")
+            nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+
+
+            plt.axis('off')
+            plt.tight_layout()
+            plt.title("Graph")
+            plt.show()
+
+        else:
+            plt.savefig("graph.png")
+            f.write("![Graph](graph.png)\n")
+
+
+        # PRIM ALGORITHM
+        mst_graph = mst_prim(graph=G)
+
+        f.write("MST: \n")
+        for edge in mst_graph.edges(data=True):
+            f.write(str(edge) + "\n")
+
+
+        if PRINT_GRAPH:
+
+            pos = nx.spring_layout(mst_graph, seed=7)  # positions for all nodes - seed for reproducibility
+            # nodes
+            nx.draw_networkx_nodes(mst_graph, pos, node_size=500)
+
+            # edges
+            nx.draw_networkx_edges(mst_graph, pos, edgelist=G.edges(), width=6)
+
+            # labels
+            nx.draw_networkx_labels(mst_graph, pos, font_size=20, font_family="sans-serif")
+
+            # edge labels
+            labels = nx.get_edge_attributes(mst_graph, "weight")
+            nx.draw_networkx_edge_labels(mst_graph, pos, edge_labels=labels)
+
+
+            plt.axis('off')
+            plt.tight_layout()
+            plt.title("MST Graph")
+            plt.show()
+
+        else:
+            plt.savefig("mst_graph.png")
+            f.write("![MST Graph](mst_graph.png)\n")
+
+
+        f.close()
 
 
