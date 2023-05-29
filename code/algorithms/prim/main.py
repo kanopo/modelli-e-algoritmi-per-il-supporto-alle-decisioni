@@ -90,12 +90,13 @@ if __name__ == '__main__':
 
 
         plt.axis('off')
-        plt.tight_layout()
         plt.title("Graph")
-        # plt.show()
-
         plt.savefig("graph.png")
-        f.write("![Graph](graph.png)\n")
+        plt.show()
+
+
+        plt.clf()
+        f.write("![Graph](./graph.png)\n")
 
 
         # PRIM ALGORITHM
@@ -122,12 +123,11 @@ if __name__ == '__main__':
 
 
         plt.axis('off')
-        plt.tight_layout()
         plt.title("MST Graph")
-        # plt.show()
-
         plt.savefig("mst_graph.png")
-        f.write("![MST Graph](mst_graph.png)\n")
+        plt.show()
+
+        f.write("![MST Graph](./mst_graph.png)\n")
 
 
         f.close()
