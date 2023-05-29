@@ -1,14 +1,6 @@
 import networkx as nx
-# import matplotlib
-# matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import random
-import markdown
-
-
-
-
-
 
 """
 Implementazione dell'algoritmo Prim per risolvere gli esercizi di MST
@@ -25,7 +17,6 @@ def mst_prim(graph: nx.Graph):
     random_node_index = random.randint(0, len(graph.nodes()) - 1)
 
     start = list(graph.nodes())[random_node_index]
-    print("Partenza: ", start)
 
     visited.add(start)
 
@@ -66,7 +57,6 @@ if __name__ == '__main__':
         f.write("Implementazione dell'algoritmo Prim per risolvere gli esercizi di MST\n")
 
 
-        PRINT_GRAPH = False
         G = nx.Graph()
 
         G.add_edge(0, 2, weight=2)
@@ -84,30 +74,28 @@ if __name__ == '__main__':
 
 
 
-        if PRINT_GRAPH:
-            pos = nx.spring_layout(G, seed=7)  # positions for all nodes - seed for reproducibility
-            # nodes
-            nx.draw_networkx_nodes(G, pos, node_size=500)
+        pos = nx.spring_layout(G, seed=7)  # positions for all nodes - seed for reproducibility
+        # nodes
+        nx.draw_networkx_nodes(G, pos, node_size=500)
 
-            # edges
-            nx.draw_networkx_edges(G, pos, edgelist=G.edges(), width=6)
+        # edges
+        nx.draw_networkx_edges(G, pos, edgelist=G.edges(), width=6)
 
-            # labels
-            nx.draw_networkx_labels(G, pos, font_size=20, font_family="sans-serif")
+        # labels
+        nx.draw_networkx_labels(G, pos, font_size=20, font_family="sans-serif")
 
-            # edge labels
-            labels = nx.get_edge_attributes(G, "weight")
-            nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
+        # edge labels
+        labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=labels)
 
 
-            plt.axis('off')
-            plt.tight_layout()
-            plt.title("Graph")
-            plt.show()
+        plt.axis('off')
+        plt.tight_layout()
+        plt.title("Graph")
+        # plt.show()
 
-        else:
-            plt.savefig("graph.png")
-            f.write("![Graph](graph.png)\n")
+        plt.savefig("graph.png")
+        f.write("![Graph](graph.png)\n")
 
 
         # PRIM ALGORITHM
@@ -118,31 +106,28 @@ if __name__ == '__main__':
             f.write(str(edge) + "\n")
 
 
-        if PRINT_GRAPH:
+        pos = nx.spring_layout(mst_graph, seed=7)  # positions for all nodes - seed for reproducibility
+        # nodes
+        nx.draw_networkx_nodes(mst_graph, pos, node_size=500)
 
-            pos = nx.spring_layout(mst_graph, seed=7)  # positions for all nodes - seed for reproducibility
-            # nodes
-            nx.draw_networkx_nodes(mst_graph, pos, node_size=500)
+        # edges
+        nx.draw_networkx_edges(mst_graph, pos, edgelist=G.edges(), width=6)
 
-            # edges
-            nx.draw_networkx_edges(mst_graph, pos, edgelist=G.edges(), width=6)
+        # labels
+        nx.draw_networkx_labels(mst_graph, pos, font_size=20, font_family="sans-serif")
 
-            # labels
-            nx.draw_networkx_labels(mst_graph, pos, font_size=20, font_family="sans-serif")
-
-            # edge labels
-            labels = nx.get_edge_attributes(mst_graph, "weight")
-            nx.draw_networkx_edge_labels(mst_graph, pos, edge_labels=labels)
+        # edge labels
+        labels = nx.get_edge_attributes(mst_graph, "weight")
+        nx.draw_networkx_edge_labels(mst_graph, pos, edge_labels=labels)
 
 
-            plt.axis('off')
-            plt.tight_layout()
-            plt.title("MST Graph")
-            plt.show()
+        plt.axis('off')
+        plt.tight_layout()
+        plt.title("MST Graph")
+        # plt.show()
 
-        else:
-            plt.savefig("mst_graph.png")
-            f.write("![MST Graph](mst_graph.png)\n")
+        plt.savefig("mst_graph.png")
+        f.write("![MST Graph](mst_graph.png)\n")
 
 
         f.close()

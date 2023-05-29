@@ -10,8 +10,8 @@ Grafo di partenza:
 (4, 5, {'weight': 3})
 ![Graph](graph.png)
 MST: 
+(4, 2, {'weight': 1})
 (2, 3, {'weight': 1})
-(2, 4, {'weight': 1})
 (2, 0, {'weight': 2})
 (3, 5, {'weight': 1})
 (3, 1, {'weight': 3})
