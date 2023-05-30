@@ -1,187 +1,141 @@
 \chapter{Problemi di flusso}
 
-\section{Algoritmi per i problemi di flusso a costo minimo}
-
-Gli algoritmi per i problemi di flusso a costo minimo sono un insieme di tecniche utilizzate per trovare il flusso a costo minimo in un grafo. Il flusso a costo minimo si riferisce alla quantità massima di materiale che può essere spostata da una sorgente a una destinazione attraverso un grafo con il costo minimo.
-
-
-\subsection{Soluzione di base}
-la soluzione di base si ottiene ponenendo il flusso di tutti gli archi che fanno parte
-dell'albero di supporto a 0.
-
-\subsection{Ammissibilità e degenerazione}
-Se i flussi in base hanno valore \textbf{non negativo}, si parla di base \textbf{ammissibile.}
-Se i flussi in base hanno valore \textbf{nullo}, si parla di base \textbf{degenere.}
-
-\subsection{Coefficiente di costo ridotto}
-Data una soluzione di base ammissibile, viene associato un \textbf{coefficiente di costo ridotto} che misura
-la variazioe del valore dell'obiettivo al crescere dell'unità del valore del flusso su un arco 
-fuori base.
-
-\subsection{Condizione di ottimalità}
-Assumiamo di avere una soluzione di base per un problema di programmazione lineare a costo minimo con vincoli di flusso. Una soluzione di base è costituita da un insieme di archi che formano un flusso ammissibile, mentre tutti gli altri archi sono fuori base, cioè non fanno parte del flusso.
-
-Il coefficiente di costo ridotto di un arco è la differenza tra il costo dell'arco e il costo marginale del flusso su quell'arco. In altre parole, il costo ridotto di un arco misura di quanto si ridurrebbe il costo totale del flusso se si aumentasse il flusso su quell'arco di un'unità.
-
-Se i coefficienti di costo ridotto di tutti gli archi fuori base sono non negativi, significa che aumentare il flusso su qualsiasi arco fuori base dal suo valore nullo attuale comporta una crescita dell'obiettivo (se il coefficiente è positivo) o nessuna variazione nell'obiettivo (se ha valore nullo).
-
-Questo accade perché se il coefficiente di costo ridotto di un arco fuori base è positivo, significa che aumentare il flusso su quell'arco ridurrebbe il costo totale del flusso. Al contrario, se il coefficiente di costo ridotto di un arco fuori base è nullo, significa che aumentare il flusso su quell'arco non avrebbe alcun effetto sul costo totale del flusso.
-
-In pratica, questo risultato è importante perché suggerisce che se i coefficienti di costo ridotto sono tutti non negativi, si può essere certi che la soluzione corrente di base è ottimale e non ci sono flussi migliori con un costo inferiore. In altre parole, non c'è alcun margine di miglioramento per la soluzione di base corrente e quindi non c'è bisogno di eseguire ulteriori iterazioni dell'algoritmo di programmazione lineare a costo minimo.
-
-\subsection{How to calcolare?}
-Per applicare l'algoritmo del simplesso a costo minimo per i problemi di flusso, è necessario avere una soluzione di base iniziale. Una possibile strategia per ottenere una soluzione di base iniziale è quella di selezionare un albero di supporto del grafo residuo e utilizzare gli archi dell'albero come base iniziale. 
-
-Per selezionare l'albero di supporto, si può partire da una soluzione di flusso nulla e iterativamente aggiungere archi all'albero di supporto finché non si raggiunge una soluzione di base ammissibile. 
-
-Per aggiungere un arco fuori dalla base all'albero di supporto, si può seguire la procedura seguente:
-
-\begin{enumerate}
-\item Aggiungere l'arco fuori dalla base all'albero di supporto corrispondente alla base attuale.
-\item Considerare l'unico ciclo che si forma con tale aggiunta.
-\item Fissare come verso del ciclo quello dell'arco fuori dalla base.
-\item Calcolare il coefficiente di costo ridotto sommando tra loro tutti i costi relativi agli archi attraversati dal ciclo nel loro stesso verso e sottraendo al risultato i costi degli archi attraversati dal ciclo in senso opposto.
-\end{enumerate}
-
-Il coefficiente di costo ridotto così calcolato indica la variazione del costo totale del flusso se l'arco fuori dalla base viene aggiunto al flusso corrente, mantenendo il flusso su tutti gli altri archi della base costante. 
-
-Se il coefficiente di costo ridotto dell'arco fuori dalla base è negativo, è conveniente aumentare il flusso su tale arco per ridurre il costo totale del flusso. In tal caso, si può utilizzare l'algoritmo del simplesso a costo minimo per determinare la nuova soluzione di base ammissibile che minimizza il costo totale del flusso, partendo dalla soluzione di base attuale e utilizzando l'arco fuori dalla base appena aggiunto come variabile in entrata.
-
-\subsection{Condizione di illimitatezza}
-La condizione di illimitatezza nel problema di flusso a costo minimo si verifica quando l'aggiunta di un arco fuori dalla base con coefficiente di costo ridotto negativo crea un ciclo orientato nel grafo residuo. Questo significa che è possibile aumentare il flusso lungo il ciclo orientato senza limiti, riducendo continuamente il costo totale del flusso.
-
-In altre parole, se si ha un ciclo orientato nel grafo residuo, è possibile aumentare il flusso su tale ciclo senza limiti, riducendo il costo totale del flusso ad ogni passo. Questo comporta che non esiste una soluzione di costo minimo nel problema di flusso a costo minimo, poiché il costo del flusso può essere ridotto all'infinito attraverso l'aumento del flusso lungo il ciclo orientato.
-
-Pertanto, se si verifica questa condizione, il problema di flusso a costo minimo ha obiettivo illimitato e non esiste una soluzione di costo minimo finito. In tal caso, si può concludere che il problema non ha soluzione, oppure che la soluzione del problema richiede una restrizione addizionale al modello originale per evitare la presenza di cicli orientati.
-
-\subsection{Cambio di base}
-Se non sono soddisfatte le condizioni di ottimalità e illimitatezza procedo con un cambio di base:
+\section{Classificazione dei nodi}
 \begin{itemize}
-  \item scelgo un arco fuori base da inserire nella nuova base
-  \item scelgo un arco in base da far uscire
+  \item \textbf{Sorgente:} Nodo che ha solo archi uscenti
+  \item \textbf{Destinazione:} Nodo che ha solo archi entranti
+  \item \textbf{Nodo intermedio:} Nodo che ha sia archi entranti che uscenti
 \end{itemize}
 
-Per scegliere gi archi da inserire in base, si deve scegliere quelli con coefficiente di costo ridotto negativo.
+\section{Problema di flusso a costo minimo}
+Far arrivare il prodotto dalla sorgente alla destinazione con il costo minimo.
 
+\section{Soluzione di base}
+Si ottiene ponendo a $0$ il flusso di tutti gli archi che fanno parte dell'albero di supporto.
 
-\subsection{Aggiornamento del flusso(metodo del ciclo di aumento)}
-\begin{enumerate}
-\item Aggiungere l'arco che si vuole far entrare nella base.
-\item Si formerà un ciclo, che viene orientato secondo il verso di questo arco.
-\item Si porta il flusso lungo questo arco a $\Delta$.
-\item Si incrementa di $\Delta$ il flusso lungo gli archi del ciclo attraversati secondo il proprio verso.
-\item Si decrementa di $\Delta$ il flusso lungo gli archi attraversati in verso opposto al proprio.
-\end{enumerate}
-
-In questo modo, il flusso totale viene aumentato di $\Delta$ lungo il ciclo e, contemporaneamente, il costo totale viene ridotto del valore corrispondente al costo del ciclo, che è calcolato come la somma dei costi degli archi attraversati secondo il proprio verso meno i costi degli archi attraversati in senso opposto. Il metodo del ciclo di aumento viene ripetuto finché non si raggiunge una soluzione di flusso a costo minimo.
-
-Questo procedimento sfrutta il fatto che, se esiste una soluzione di flusso a costo minimo, allora deve esistere un insieme di archi (la base) tale che il flusso lungo questi archi sia massimo e che tutti gli archi al di fuori di questa base abbiano coefficienti di costo ridotto non negativi. L'aggiunta di un arco fuori dalla base con coefficiente di costo ridotto negativo crea un ciclo orientato nel grafo residuo, che può essere utilizzato per ridurre il costo totale del flusso e aumentare il flusso totale lungo il ciclo, portando così ad una soluzione migliore.
-
-
-\subsection{Algoritmo del simplesso su rete}
-Una volta completate le operazioni relative alla base e definita una nuova base, 
-l'algoritmo del simplesso su rete ripete le operazioni sulla nuova base, iterando
-questo procedimento fino a soddisfare le condiioni di ottimalità oppure quelle 
-di illimitatezza.
-
-Per utilizzare l'algoritmo del simplesso su rete devo avere una base da cui partire
-e si utilizza un metodo formato da due fasi per ottenere la base di partenza ammissibile.
-
-
-\textbf{Fase 1:}
-\begin{enumerate}
-\item Si aggiunge un nuovo nodo sorgente $s'$ e si collega ad ogni nodo sorgente esistente tramite un arco di capacità infinita e costo nullo.
-\item Si aggiunge un nuovo nodo destinazione $t'$ e si collega ad ogni nodo destinazione esistente tramite un arco di capacità infinita e costo nullo.
-\item Si risolve il problema di flusso massimo da $s'$ a $t'$ utilizzando un algoritmo come l'algoritmo di Ford-Fulkerson.
-\item Se il flusso massimo ottenuto è inferiore alla somma delle capacità dei nodi sorgente originali, allora non esiste una base ammissibile per il problema e l'algoritmo termina.
-\end{enumerate}
-
-\textbf{Fase 2:}
-\begin{enumerate}
-\item Si costruisce l'albero di supporto dell'ultimo flusso trovato nella fase 1.
-\item Se l'albero di supporto non contiene tutti i nodi, allora l'algoritmo termina in quanto non esiste una base ammissibile per il problema.
-\item Se l'albero di supporto contiene tutti i nodi, allora si utilizza l'albero di supporto per costruire una base ammissibile per il problema utilizzando l'algoritmo del simplesso su rete.
-\end{enumerate}
-
-L'idea alla base di questo algoritmo è di utilizzare la fase 1 per verificare l'esistenza di una soluzione ammissibile e la fase 2 per costruire una base ammissibile utilizzando l'albero di supporto del flusso massimo trovato nella fase 1.
-
-\subsection{Algoritmo del simplesso su rete(archi con vincoli di flusso)}
-\begin{enumerate}
-\item Partendo dalla base ammissibile $B_0$, calcolare il flusso massimo $f_{B_0}$ che può passare attraverso di essa risolvendo il problema di flusso massimo su s-t cut.
-
-\item Calcolare i coefficienti di costo ridotto $c_e' = c_e - \pi_{h(e)} + \pi_{t(e)}$ per ogni arco $e$ fuori dalla base attuale, dove $\pi$ è il potenziale associato al nodo.
-
-\item Se tutti i coefficienti di costo ridotto sono non negativi, allora la soluzione corrente è ottima. Altrimenti, scegliere un arco $e$ con coefficiente di costo ridotto negativo e creare un ciclo orientato con tale arco.
-
-\item Determinare il flusso massimo $f_e$ che può passare attraverso l'arco $e$ selezionato. Se $f_e = 0$, andare al passo 3 e selezionare un nuovo arco con coefficiente di costo ridotto negativo. Altrimenti, se il flusso massimo $f_e$ è minore del flusso $f_{B_0}$ passante attraverso la base attuale, allora la soluzione ottima è infinita (condizione di illimitatezza). Altrimenti, se il flusso $f_e$ è uguale a $f_{B_0}$, allora il flusso rimane ammissibile e si va al passo 6. Altrimenti, se $f_e > f_{B_0}$, si va al passo 5.
-
-\item Aggiornare il flusso $f_{B_0}$ con $f_e$ e ottenere la nuova base ammissibile $B_1$. Tornare al passo 2.
-
-\item Utilizzando il ciclo orientato individuato al passo 3, aggiornare il flusso lungo gli archi del ciclo orientato come segue:
+\section{Ammissibilit\`a e degenerazione}
 \begin{itemize}
-\item Se un arco del ciclo orientato è diretto nello stesso verso dell'arco selezionato $e$, decrementare il flusso su tale arco di $f_e$.
-\item Se un arco del ciclo orientato è diretto in senso opposto all'arco selezionato $e$, incrementare il flusso su tale arco di $f_e$.
+  \item \textbf{Ammissibilit\`a:} Se i flussi in base hanno valore \textbf{non negativo}
+  \item \textbf{Degenerazione:} Se i flussi in base hanno valore \textbf{nullo}
 \end{itemize}
-Tornare al passo 2.
+
+
+\section{Coefficiente di costo ridotto}
+Il \textbf{coefficiente di costo ridotto} misura la variazione del valore dell'obiettivo al crescere dell'unit\`a del valore del flusso su un arco fuori base.
+
+\section{Condizione di ottimalit\`a}
+Se i coefficienti di consto ridotto degli archi fuori base sono non negativi, la soluzione di base \`e ottima.
+
+
+\subsection{Calcolo del coefficiente di costo ridotto}
+\begin{enumerate}
+  \item Prendo un arco fuori base
+  \item Aggiungo l'arco all'albero di supporto
+  \item Considero l'unico ciclo che si \`e formato
+  \item Fisso il verso del ciclo come il verso del'arco fuori base che ho aggiunto
+  \item Calcolo il coefficiente di costo ridotto facendo una somma algebrica di tutti gli archi del ciclo, sommando se l'arco che si attraversa ha direzioen concorde con l'arco fuori base inserito, sottraendo altrimenti.
 \end{enumerate}
 
-\section{Problema di flusso massimo}
 
-Il problema di flusso massimo consiste nel trovare il flusso di massimo valore che può essere trasmesso attraverso una rete di flusso. In altre parole, data una rete di flusso con una sorgente e un pozzo, il problema di flusso massimo cerca di trovare il flusso massimo che può essere inviato dalla sorgente al pozzo attraverso la rete, rispettando i vincoli di capacità degli archi.
+\section{Condizione di illimitatezza}
+Se l'aggiunta di un'arco fuori base crea un ciclo di costo negativo, il problema \`e illimitato.
 
-Il flusso in una rete di flusso rappresenta la quantità di materiale (ad esempio liquido, gas, dati) che viene trasmesso attraverso la rete. Il flusso viene misurato in unità di flusso (ad esempio litri al secondo), e ogni arco nella rete ha una capacità massima di flusso che può trasportare. Il flusso inviato dalla sorgente deve essere uguale al flusso ricevuto dal pozzo, e il flusso attraverso ogni arco non può superare la sua capacità massima.
 
-Il problema di flusso massimo può essere risolto utilizzando l'algoritmo di Ford-Fulkerson, che prevede l'incremento del flusso lungo un cammino aumentante nella rete fino a quando non è possibile trovare ulteriori cammini aumentanti. Un cammino aumentante è un percorso dalla sorgente al pozzo attraverso la rete in cui il flusso attraverso ogni arco non ha ancora raggiunto la capacità massima.
+\section{Cambio di base}
+Se le condizioni di ottimalit\`a e illimitatezza non sono soddisfatte, \`e necessario cambiare base.
 
-L'algoritmo di Ford-Fulkerson può essere implementato utilizzando l'algoritmo del simplesso sul grafo residuo della rete. Il grafo residuo è un grafo diretto che rappresenta le capacità residue degli archi nella rete, dopo che un certo flusso è stato inviato attraverso la rete. L'algoritmo del simplesso viene utilizzato per trovare il cammino aumentante di capacità massima nel grafo residuo e incrementare il flusso lungo tale cammino.
+Si procede togliendo un arco dalla base e aggiungendone un altro.
 
-L'algoritmo di Ford-Fulkerson termina quando non è più possibile trovare cammini aumentanti nel grafo residuo. In quel momento, il flusso trovato è il flusso di massimo valore che può essere trasmesso attraverso la rete.
+Per aggiungere un arco in base, bisogna scegliere un arco fuori base che abbia coefficiente di costo ridotto negativo.
 
-\subsection{Tagli nella rete}
+\subsection{Aggionamento dei flussi}
+\begin{enumerate}
+  \item Aggiungo l'arco in base
+  \item Si forma il ciclo secondo il verso dell'arco fuori base
+  \item Porto a $\Delta$ il flusso dell'arco fuori base
+  \item Aumento di $$\Delta$$ il flusso degli archi che hanno verso concorde con l'arco fuori base
+  \item Diminuisco di $$\Delta$$ il flusso degli archi che hanno verso opposto all'arco fuori base
+\end{enumerate}
 
-Un taglio $C$ in una rete di flusso è una partizione del set di nodi $V$ in due sottoinsiemi disgiunti $S$ e $T=V\setminus S$ tali che la sorgente $s$ appartiene a $S$ e il pozzo $t$ appartiene a $T$. Il taglio attraversato da un flusso è il taglio che è attraversato da almeno un arco del flusso. Il valore del taglio $C=(S,T)$ è la somma dei flussi che attraversano tutti gli archi tra $S$ e $T$. In altre parole:
 
-$$
-val(C) = \sum_{i\in S, j\in T} f_{ij}
-$$
 
-dove $f_{ij}$ rappresenta il flusso lungo l'arco $(i,j)$.
+\section{Algoritmo del simplesso su rete}
+L'algoritmo del simplesso su rete \`e un algoritmo per risolvere il problema di flusso a costo minimo.
 
-Un taglio minimo è un taglio attraverso il quale passa il minimo valore di flusso possibile. In altre parole, è un taglio che ha il valore minimo tra tutti i possibili tagli della rete.
-
-\subsection{Algoritmo di Ford-Fulkerson}
-
-\begin{algorithm}[H]
-\caption{Algoritmo di Ford-Fulkerson}
-\begin{algorithmic}[1]
-\Procedure{Ford-Fulkerson}{$G, s, t$}
-\State Inizializza il flusso $f(u, v) = 0$ per ogni arco $(u,v)\in G$
-\While{esiste un cammino aumentante $p$ in $G_f$}
-    \State Trova la capacità residua minima $c_f(p)$ dell'arco in $p$
-    \ForAll{gli archi $(u,v)\in p$}
-        \State Aggiorna il flusso: $f(u,v) \gets f(u,v) + c_f(p)$
-        \State Aggiorna il flusso inverso: $f(v,u) \gets f(v,u) - c_f(p)$
-    \EndFor
-\EndWhile
-\State \textbf{return} $f$
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-
-Nota: $G_f$ indica il grafo residuo corrispondente al flusso $f$. Il cammino aumentante $p$ è un cammino dal nodo sorgente $s$ al nodo destinazione $t$ in $G_f$ tale che la capacità residua $c_f(p)$ sia strettamente positiva per ogni arco in $p$.
-
-\subsection{Procedura di etichettatura}
+Itera il cambio di base finch\`e non trova una soluzione ottima.
 
 \begin{enumerate}
-  \item Inizializzare il flusso $f_{u,v} = 0$ per ogni arco $(u,v)$ nel grafo.
-  \item Scegliere un cammino aumentante dal nodo di sorgente $s$ al nodo di destinazione $t$ utilizzando la procedura di ricerca di cammino aumentante come l'algoritmo di Ford-Fulkerson.
-  \item Se non ci sono cammini aumentanti, terminare: il flusso corrente è massimo.
-  \item Calcolare la capacità residua minima lungo il cammino aumentante trovato: 
-  $$c_f(p) = \min_{(u,v) \in p} (c(u,v) - f(u,v))$$
-  dove $p$ è il cammino aumentante.
-  \item Aggiornare il flusso lungo il cammino aumentante: 
-  $$f(u,v) \leftarrow f(u,v) + c_f(p)$$ per ogni arco $(u,v)$ in $p$.
-  \item Aggiornare il flusso lungo gli archi di ritorno del cammino aumentante: 
-  $$f(v,u) \leftarrow f(v,u) - c_f(p)$$ per ogni arco $(v,u)$ in $p$.
-  \item Ritornare al passo 2.
+  \item Verifica di ottimalit\`a
+  \item Verifica di illimitatezza
+  \item Cambio di base
 \end{enumerate}
+
+
+
+\section{Problema del taglio minimo}
+\subsection{Definizione}
+Il problema del taglio minimo consiste nel trovare il taglio di costo minimo che separa la sorgente dal pozzo in una rete di flusso.
+
+\subsection{Algoritmo - Ford-Fulkerson}
+DA RIFARE
+
+% \section{Problema di flusso massimo}
+%
+% Il problema di flusso massimo consiste nel trovare il flusso di massimo valore che può essere trasmesso attraverso una rete di flusso. In altre parole, data una rete di flusso con una sorgente e un pozzo, il problema di flusso massimo cerca di trovare il flusso massimo che può essere inviato dalla sorgente al pozzo attraverso la rete, rispettando i vincoli di capacità degli archi.
+%
+% Il flusso in una rete di flusso rappresenta la quantità di materiale (ad esempio liquido, gas, dati) che viene trasmesso attraverso la rete. Il flusso viene misurato in unità di flusso (ad esempio litri al secondo), e ogni arco nella rete ha una capacità massima di flusso che può trasportare. Il flusso inviato dalla sorgente deve essere uguale al flusso ricevuto dal pozzo, e il flusso attraverso ogni arco non può superare la sua capacità massima.
+%
+% Il problema di flusso massimo può essere risolto utilizzando l'algoritmo di Ford-Fulkerson, che prevede l'incremento del flusso lungo un cammino aumentante nella rete fino a quando non è possibile trovare ulteriori cammini aumentanti. Un cammino aumentante è un percorso dalla sorgente al pozzo attraverso la rete in cui il flusso attraverso ogni arco non ha ancora raggiunto la capacità massima.
+%
+% L'algoritmo di Ford-Fulkerson può essere implementato utilizzando l'algoritmo del simplesso sul grafo residuo della rete. Il grafo residuo è un grafo diretto che rappresenta le capacità residue degli archi nella rete, dopo che un certo flusso è stato inviato attraverso la rete. L'algoritmo del simplesso viene utilizzato per trovare il cammino aumentante di capacità massima nel grafo residuo e incrementare il flusso lungo tale cammino.
+%
+% L'algoritmo di Ford-Fulkerson termina quando non è più possibile trovare cammini aumentanti nel grafo residuo. In quel momento, il flusso trovato è il flusso di massimo valore che può essere trasmesso attraverso la rete.
+%
+% \subsection{Tagli nella rete}
+%
+% Un taglio $C$ in una rete di flusso è una partizione del set di nodi $V$ in due sottoinsiemi disgiunti $S$ e $T=V\setminus S$ tali che la sorgente $s$ appartiene a $S$ e il pozzo $t$ appartiene a $T$. Il taglio attraversato da un flusso è il taglio che è attraversato da almeno un arco del flusso. Il valore del taglio $C=(S,T)$ è la somma dei flussi che attraversano tutti gli archi tra $S$ e $T$. In altre parole:
+%
+% $$
+% val(C) = \sum_{i\in S, j\in T} f_{ij}
+% $$
+%
+% dove $f_{ij}$ rappresenta il flusso lungo l'arco $(i,j)$.
+%
+% Un taglio minimo è un taglio attraverso il quale passa il minimo valore di flusso possibile. In altre parole, è un taglio che ha il valore minimo tra tutti i possibili tagli della rete.
+%
+% \subsection{Algoritmo di Ford-Fulkerson}
+%
+% \begin{algorithm}[H]
+% \caption{Algoritmo di Ford-Fulkerson}
+% \begin{algorithmic}[1]
+% \Procedure{Ford-Fulkerson}{$G, s, t$}
+% \State Inizializza il flusso $f(u, v) = 0$ per ogni arco $(u,v)\in G$
+% \While{esiste un cammino aumentante $p$ in $G_f$}
+%     \State Trova la capacità residua minima $c_f(p)$ dell'arco in $p$
+%     \ForAll{gli archi $(u,v)\in p$}
+%         \State Aggiorna il flusso: $f(u,v) \gets f(u,v) + c_f(p)$
+%         \State Aggiorna il flusso inverso: $f(v,u) \gets f(v,u) - c_f(p)$
+%     \EndFor
+% \EndWhile
+% \State \textbf{return} $f$
+% \EndProcedure
+% \end{algorithmic}
+% \end{algorithm}
+%
+% Nota: $G_f$ indica il grafo residuo corrispondente al flusso $f$. Il cammino aumentante $p$ è un cammino dal nodo sorgente $s$ al nodo destinazione $t$ in $G_f$ tale che la capacità residua $c_f(p)$ sia strettamente positiva per ogni arco in $p$.
+%
+% \subsection{Procedura di etichettatura}
+%
+% \begin{enumerate}
+%   \item Inizializzare il flusso $f_{u,v} = 0$ per ogni arco $(u,v)$ nel grafo.
+%   \item Scegliere un cammino aumentante dal nodo di sorgente $s$ al nodo di destinazione $t$ utilizzando la procedura di ricerca di cammino aumentante come l'algoritmo di Ford-Fulkerson.
+%   \item Se non ci sono cammini aumentanti, terminare: il flusso corrente è massimo.
+%   \item Calcolare la capacità residua minima lungo il cammino aumentante trovato: 
+%   $$c_f(p) = \min_{(u,v) \in p} (c(u,v) - f(u,v))$$
+%   dove $p$ è il cammino aumentante.
+%   \item Aggiornare il flusso lungo il cammino aumentante: 
+%   $$f(u,v) \leftarrow f(u,v) + c_f(p)$$ per ogni arco $(u,v)$ in $p$.
+%   \item Aggiornare il flusso lungo gli archi di ritorno del cammino aumentante: 
+%   $$f(v,u) \leftarrow f(v,u) - c_f(p)$$ per ogni arco $(v,u)$ in $p$.
+%   \item Ritornare al passo 2.
+% \end{enumerate}

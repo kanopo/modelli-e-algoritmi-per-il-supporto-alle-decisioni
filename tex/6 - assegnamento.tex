@@ -1,86 +1,109 @@
 \chapter{Assegnamento}
-L'assegnamento è un problema di ottimizzazione che consiste nel trovare la soluzione ottima di un insieme di assegnamenti tra un gruppo di lavoratori e un gruppo di mansioni, considerando i costi associati ad ogni possibile assegnamento. In altre parole, l'assegnamento cerca di minimizzare il costo totale dell'assegnamento dei lavoratori alle mansioni, soddisfacendo allo stesso tempo i vincoli di assegnamento.
 
+\section{Problema}
+L'assegnamento \`e un problema di ottimizzazione che consiste nel trovare la soluzione ottima di un insieme di assegnamenti tra un gruppo di lavoratori e un gruppo di mansioni, considerando i costi associati ad ogni possibile assegnamento. In altre parole, l'assegnamento cerca di minimizzare il costo totale dell'assegnamento dei lavoratori alle mansioni, soddisfacendo allo stesso tempo i vincoli di assegnamento.
+
+\section{Matrice dei costi}
 Per questo tipo di task si utilizzano delle matrici che rappresentano i costi,
-ecco un esempio di matrice dei costi per l'assegnamento di lavoratori a mansioni:
 
-\begin{equation}
-\begin{bmatrix}
- & A_1 & A_2 & A_3 & A_4 & A_5 \\
-B_1 & c_{11} & c_{12} & c_{13} & c_{14} & c_{15} \\
-B_2 & c_{21} & c_{22} & c_{23} & c_{24} & c_{25} \\
-B_3 & c_{31} & c_{32} & c_{33} & c_{34} & c_{35} \\
-B_4 & c_{41} & c_{42} & c_{43} & c_{44} & c_{45} \\
-B_5 & c_{51} & c_{52} & c_{53} & c_{54} & c_{55}
-\end{bmatrix}
-\end{equation}
+% ecco un esempio di matrice dei costi per l'assegnamento di lavoratori a mansioni:
+\begin{center}
+  \begin{tabular}[t]{l|c|c|c|c|c}
+        & $b_1$    & $b_2$    & $b_3$    & $b_4$    & $b_5$     \\
+  \hline
+  $a_1$ & $c_{11}$ & $c_{12}$ & $c_{13}$ & $c_{14}$ & $c_{15}$  \\
+  $a_2$ & $c_{21}$ & $c_{22}$ & $c_{23}$ & $c_{24}$ & $c_{25}$  \\
+  $a_3$ & $c_{31}$ & $c_{32}$ & $c_{33}$ & $c_{34}$ & $c_{35}$  \\
+  $a_4$ & $c_{41}$ & $c_{42}$ & $c_{43}$ & $c_{44}$ & $c_{45}$  \\
+  \end{tabular}
+\end{center}
 
-In questa matrice, $c_{ij}$ rappresenta il costo associato all'assegnamento del lavoratore $B_i$ alla mansione $A_j$.
+\subsection{Riduzione della matrice dei costi}
+Per effettuare la riduzione della matrice dei costi occorre selezionare l'elemento
+con il costo minore all'interno dell'intera matrice e sottastrarlo a tutti gli altri elementi della matrice.
+
+% esempio con una matrice 4x4
+\[
+  \begin{array}{cccc}
+        & b_1 & b_2 & b_3 \\
+    a_1 & 5   & 2   & 4   \\
+    a_2 & 2   & 4   & 3   \\
+    a_3 & 4   & 3   & 6   \\
+  \end{array}
+\]
+
+Dove l'elemento con il costo minore \`e $2$ e quindi la matrice diventa:
+\[
+  \begin{array}{cccc}
+      & b_1 & b_2 & b_3 \\
+  a_1 & 5   & 2   & 4   \\
+  a_2 & 2   & 4   & 3   \\
+  a_3 & 4   & 3   & 6   \\
+  d_1 & 2   & 2   & 3   \\
+  \end{array}
+\]
+
+
+Il risulato di questa operazione \`e una matrice ridotta, che contiene almeno uno zero per ogni riga e colonna.
+
+\[
+  \begin{array}{cccc}
+      & b_1 & b_2 & b_3 \\
+  a_1 & 3   & 0   & 1   \\
+  a_2 & 0   & 2   & 0   \\
+  a_3 & 2   & 1   & 3   \\
+  \end{array}
+\]
+
+Questa operazione di riduzione si pu\`o applicare anche aggiungendo una colonna.
+
 
 \section{Algoritmo ungherese}
-L'algoritmo ungherese, noto anche come algoritmo di Kuhn-Munkres, è un algoritmo per la soluzione del problema dell'assegnamento, ovvero il problema di assegnare N lavoratori a N mansioni, minimizzando i costi totali dell'assegnamento. L'algoritmo utilizza il concetto di cammino alternante e cammino aumentante per trovare l'assegnamento ottimale.
-\subsection{Ridurre la matrice dei costi}
+L'algoritmo ungherese, noto anche come algoritmo di assegnazione o algoritmo Munkres, è un algoritmo utilizzato per risolvere il problema dell'assegnazione ottima in un problema di assegnazione. Questo problema riguarda l'assegnazione di un insieme di elementi a un altro insieme di elementi, minimizzando o massimizzando una funzione di costo associata.
 
-Per ridurre la matrice dei costi in un problema di assegnamento, puoi seguire i seguenti passi:
-\begin{enumerate}
-  
-\item Sottrarre il minimo valore in ogni riga dalla riga stessa.
-\item Sottrarre il minimo valore in ogni colonna dalla colonna stessa.
-\item Coprire la matrice con il minor numero di linee orizzontali e verticali in modo che ogni cella sia coperta da almeno una linea.
-\item Calcolare il costo minimo delle celle non coperte.
-\item Sottrarre il costo minimo alle celle coperte dalle linee orizzontali e aggiungere il costo minimo alle celle coperte dalle linee verticali.
-\item Ripetere i passi 3-5 finché non è possibile coprire la matrice con meno linee del passo precedente.
-
-\end{enumerate}
-La matrice ridotta avrà gli stessi elementi della matrice originale ma con alcune righe o colonne che contengono solamente zeri. 
-
-Ecco un esempio di matrice dei costi ridotta:
-
-$$
-\begin{pmatrix}
-0 & 1 & 5 & 8 & 1 \\
-2 & 5 & 0 & 5 & 2 \\
-1 & 0 & 3 & 6 & 7 \\
-8 & 5 & 7 & 0 & 3 \\
-3 & 3 & 2 & 1 & 0
-\end{pmatrix}
-\rightarrow
-\begin{pmatrix}
-0 & 0 & 4 & 7 & 0 \\
-1 & 4 & 0 & 4 & 1 \\
-0 & 0 & 2 & 5 & 6 \\
-5 & 2 & 4 & 0 & 1 \\
-2 & 2 & 1 & 0 & 0
-\end{pmatrix}
-\rightarrow
-\begin{pmatrix}
-x & 0 & 4 & 7 & 0 \\
-0 & 4 & 0 & 4 & 1 \\
-0 & 0 & 2 & 5 & 6 \\
-5 & 2 & 4 & 0 & 1 \\
-2 & 2 & 1 & 0 & 0
-\end{pmatrix}
-\rightarrow
-\begin{pmatrix}
-x & 0 & 4 & 7 & 0 \\
-0 & 4 & 0 & 4 & 1 \\
-0 & 0 & 2 & 5 & 6 \\
-5 & 2 & 4 & 0 & 1 \\
-0 & 0 & 0 & 0 & x
-\end{pmatrix}
-$$
-
-Nella matrice ridotta, le righe 1, 2 e 4 e le colonne 2, 4 e 5 contengono solamente zeri. Il costo complessivo della soluzione ottima è pari alla somma dei valori nella matrice originale corrispondenti alle celle che contengono un "x".
+\textbf{Algoritmo Ungherese (Algoritmo di Assegnazione)}
 
 \begin{algorithm}[H]
 \SetAlgoLined
-\KwResult{Assegnamento ottimale di lavoratori a mansioni}
-Riduci la matrice dei costi;
-Trova una soluzione di base ammissibile;
-\While{non si raggiunge la soluzione ottimale}{
-Trova un cammino aumentante;
-Incrementa il flusso lungo il cammino aumentante;
-Decrementa il flusso lungo gli archi corrispondenti nel cammino aumentante;
+\KwIn{Una matrice dei costi di dimensioni $N \times N$}
+\KwOut{Un assegnamento ottimo}
+
+Inizializza una matrice ausiliaria dei costi con gli stessi valori della matrice dei costi\;
+
+\While{Non è stata ottenuta una soluzione ottima}{
+  \textbf{Fase 1: Riduzione dei costi}\;
+  \For{Ogni riga $i$ della matrice dei costi}{
+    Sottrai il valore minimo della riga $i$ a tutti gli elementi della riga\;
+  }
+  \For{Ogni colonna $j$ della matrice dei costi}{
+    Sottrai il valore minimo della colonna $j$ a tutti gli elementi della colonna\;
+  }
+  
+  \textbf{Fase 2: Copertura delle righe e assegnazione}\;
+  Copri le righe e assegna le celle seguendo le regole:\;
+  \While{Esiste una cella non coperta}{
+    Trova una cella non coperta $C$ con il costo minimo nella sua riga e colonna\;
+    \If{La riga di $C$ non è coperta}{
+      Copri la riga di $C$\;
+    }
+    Assegna la cella $C$\;
+    \While{Esiste una riga coperta che contiene una cella assegnata}{
+      Trova una cella assegnata nella stessa riga\;
+      Assegna la cella trovata\;
+    }
+  }
+  
+  \textbf{Fase 3: Aggiornamento dei costi}\;
+  \If{Il numero di assegnazioni effettuate è minore di $N$}{
+    Calcola il valore minimo tra gli elementi non coperti della matrice dei costi\;
+    Sottrai il valore minimo a tutti gli elementi non coperti\;
+    Aggiungi il valore minimo a tutti gli elementi coperti da due linee (riga e colonna)\;
+  }
 }
-\caption{Algoritmo ungherese}
+
+\Return{L'assegnamento ottenuto}\;
+\caption{Algoritmo Ungherese (Algoritmo di Assegnazione)}
 \end{algorithm}
+
+Questo algoritmo risolve il problema dell'assegnazione ottima, riducendo i costi e assegnando le celle in base a determinate regole. Le fasi 1 e 2 vengono eseguite finché non viene ottenuta una soluzione ottima, e la fase 3 viene eseguita solo se necessario. Alla fine, l'algoritmo restituisce un assegnamento ottimo.
+

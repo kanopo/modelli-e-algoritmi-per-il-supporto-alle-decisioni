@@ -94,17 +94,6 @@ Quindi, la complessità complessiva dell'algoritmo greedy per MST è $O(n + m \l
 
 
 \section{Algoritmo MST-1 - Prim}
-(Penso sia l'algoritmo di Prim ma al prof piace inventarsi della roba a caso)
-
-% \begin{enumerate}
-%   \item Scegli un vertice arbitrario come vertice di partenza per l'MST.
-%   \item Segui i passaggi da 3 a 5 finché ci sono vertici che non sono inclusi nell'MST (chiamati vertici di confine).
-%   \item Trova gli archi che collegano qualsiasi vertice dell'albero con i vertici di confine.
-%   \item Trova l'arco di peso minimo tra questi archi.
-%   \item Aggiungi l'arco scelto all'MST se non forma un ciclo.
-%   \item Restituisci l'MST e termina.
-% \end{enumerate}
-%
 
 \begin{center}
 \begin{tikzpicture}[auto,node distance=2.5cm]
@@ -128,6 +117,46 @@ Quindi, la complessità complessiva dell'algoritmo greedy per MST è $O(n + m \l
 \end{tikzpicture}\end{center}
 
 
+  \subsection{Procedimento}
+  \begin{enumerate}
+    \item Sceglie un nodo qualsiasi come nodo di partenza e lo aggiunge alla lista dei nodi visitati
+    \item Scegliere un nodo non visitato che abbia un arco che lo colleghi a un nodo visitato con peso minimo e aggiungerlo alla lista dei nodi visitati
+    \item Ripetere il passo 2 fino a quando non sono stati visitati tutti i nodi
+  \end{enumerate}
+  
+
+
+
+\section{Algoritmo MST-2 - Kruskal}
+
+\begin{center}
+\begin{tikzpicture}[auto,node distance=2.5cm]
+    \node (A) {A};
+    \node (B) [below left of=A] {B};
+    \node (C) [below right of=A] {C};
+    \node (D) [below right of=B] {D};
+    \node (E) [right of=C] {E};
+    \node (F) [below right of=E] {F};
+    \node (G) [below left of=F] {G};
+
+    \path (A) edge node {2} (B)
+              edge node {5} (C)
+          (B) edge node {1} (D)
+              edge node {3} (C)
+          (C) edge node {2} (D)
+              edge node {4} (E)
+          (D) edge node {3} (F)
+          (E) edge node {1} (F)
+          (F) edge node {2} (G);
+\end{tikzpicture}\end{center}
+
+
+  \subsection{Procedimento}
+  \begin{enumerate}
+    \item Si ordinano tutti gli archi del grafo in ordine crescente del peso.
+    \item Si aggiunge un arco alla volta alla lista degli archi dell'albero di supporto, a patto che non si creino cicli.
+    \item Si ripete il passo 2 fino a che non si sono aggiunti $n-1$ archi, dove $n$ è il numero di nodi del grafo.
+  \end{enumerate}
 
 
 
@@ -136,45 +165,46 @@ Quindi, la complessità complessiva dell'algoritmo greedy per MST è $O(n + m \l
 
 
 
+  \chapter{Algoritmi di cammini minimi}
+
+
+  Ci sono due algotimi principali per risolvere il problema del cammino minimo:
+  \begin{itemize}
+    \item Algoritmo di Dijkstra: valido per grafi con pesi non negativi
+    \item Algoritmo di Floyd-Warshall: valido per grafi con anche pesi negativi
+  \end{itemize}
+
+
+  \section{Algoritmo di Dijkstra}
+  Percorso minimo da un nodo $s$ a tutti i nodi del grafo(grafo con pesi non negativi).
+
+  \begin{enumerate}
+    \item Si sceglie un nodo di partenza $s$ e si inizializza un vettore $d$ con la distanza di tutti i nodi da $s$.
+    \item Si sceglie il nodo $v$ con distanza minima da $s$ e si aggiorna il vettore $d$ con le distanze dei nodi adiacenti a $v$.
+    \item Si ripete il passo 2 fino a che non sono stati visitati tutti i nodi.
+  \end{enumerate}
+
+
+  \subsection{Complessit\`a}
+  L'algoritmo di Dijkstra ha complessit\`a $O(n^2)$ se il grafo \`e rappresentato con una matrice di adiacenza, $O(m \log n)$ se il grafo \`e rappresentato con una lista di adiacenza.
 
 
 
+  \section{Algoritmo di Floyd-Warshall}
+  Percorso minimo tra tutti i nodi del grafo(grafo con pesi anche negativi).
 
+  DA RIFARE
 
+%   \begin{enumerate}
+%     \item Inizializziamo una matrice di dimensioni N x N, dove N è il numero di nodi nel grafo. Chiamiamo questa matrice "dist" e inizializziamo i suoi valori con i pesi degli archi del grafo. Se non esiste un arco tra due nodi, il valore corrispondente nella matrice sarà infinito.
+%     \item Per ogni nodo nel grafo, impostiamo la distanza da se stesso a 0 nella matrice "dist".
+%     \item Eseguiamo un triplo ciclo for per tutti i nodi del grafo. Il primo ciclo indica il nodo intermedio che stiamo considerando per il calcolo dei cammini minimi.
+%     \item All'interno del triplo ciclo for, confrontiamo la distanza tra il nodo di partenza e il nodo di destinazione attraverso il nodo intermedio con la distanza attuale tra il nodo di partenza e il nodo di destinazione. Se la distanza attraverso il nodo intermedio è minore, aggiorniamo il valore corrispondente nella matrice "dist".
+%     \item Alla fine dell'algoritmo, la matrice "dist" conterrà le distanze minime tra tutti i nodi del grafo.
+%     \item Possiamo utilizzare la matrice "dist" per determinare i cammini minimi tra tutti i nodi del grafo. Inoltre, possiamo individuare cicli negativi nel grafo verificando se un valore diagonale nella matrice "dist" è negativo.
+%   \end{enumerate}
 %
-% \chapter{Minimum Spanning Tree}
-%
-%
-% I problemi di MST(Minimum Spanning Tree o alberi di supporto a peso minimo), dato un grafo non orientato con pesi sugli archi, si vuole 
-% determinare tra gli alberi di supporto del grafo quello a peso minimo.
-%
-% \section{Algoritmo greedy per MST}
-%
-%
-% \begin{enumerate}
-%   \item Si ordinano tutti gli archi del grafo in ordine crescente del peso.
-%   \item Si pone $E_T = \emptyset$ ($E_T$ è l'insieme degli archi dell'albero di supporto) e $k = 1$
-%   \item Se $E_T = V - 1$, STOP e si restituisce l'albero $T = (V, E_T)$ altrimenti proseguo
-%   \item Se l'arco $e_k$ non forma cicli con gli archi in $E_T$ lo aggiungo agli archi $E_T$, altrimenti lo scarto
-%   \item Pongo $k = k + 1$ e torno al passo 3
-% \end{enumerate}
-%
-%
-% \subsection{Correttezza dell'algoritmo}
-%
-% Non è detto che l'algoritmo greedy restituisca l'MST.
-%
-% \subsection{Complessità dell'algoritmo}
-%
-% L'operazione più costosa dell'algoritmo è quella di ordinare gli archi in ordine crescente di peso.
-%
-% Se siamo in presenza di un grafo denso, la complessità diventa $O(|E| \log(|E|))$, dove $|E|$ è il numero di archi.
-%
-%
-% \section{Vedere su yt gli algoritmi MST1 e MST2}
-% perche il prof li spiega leggermente male, come quasi tutto questo corso.
-%
-%
+% L'algoritmo di Floyd-Warshall è efficiente per grafi di piccole dimensioni, poiché richiede un tempo di esecuzione di $O(N^3)$, dove $N$ è il numero di nodi nel grafo. Tuttavia, può diventare inefficiente per grafi di grandi dimensioni a causa della complessità cubica.
 %
 % \section{Shortest path}
 %

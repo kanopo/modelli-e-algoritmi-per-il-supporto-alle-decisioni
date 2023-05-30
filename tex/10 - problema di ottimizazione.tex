@@ -1,13 +1,50 @@
-\chapter{Problema di ottimizzazione}
-Il problema di ottimizzazione è un tipo di problema matematico in cui si cerca di trovare il valore massimo o minimo di una funzione, nota come funzione obiettivo, in presenza di una serie di vincoli. Questi vincoli possono essere di natura diversa, ad esempio possono essere delle equazioni o delle disuguaglianze che limitano l'insieme di soluzioni ammissibili per il problema.
+\chapter{Problemi di ottimizzazione}
+I problemi di ottimizzazione sono un tipo di problemi matematici in cui si cerca di trovare il valore massimo o minimo di una funzione, nota come funzione obiettivo, in presenza di una serie di vincoli. Questi vincoli possono essere di natura diversa, ad esempio possono essere delle equazioni o delle disuguaglianze che limitano l'insieme di soluzioni ammissibili per il problema.
 
-Il problema di ottimizzazione si presenta in molte applicazioni pratiche, come la programmazione lineare, la schedulazione, la gestione delle risorse, la progettazione di sistemi, l'ingegneria, l'economia e molti altri campi. Solitamente, la soluzione di questi problemi richiede l'utilizzo di algoritmi e tecniche matematiche avanzate, come la programmazione dinamica, la programmazione lineare, la teoria dei grafi, la teoria dei numeri e altre ancora.
+Ogni istanza \'e rappresentata come:
+\begin{eqnarray}
+  f: S \rightarrow R
+\end{eqnarray}
+Dove $S$ \'e l'insieme delle soluzioni ammissibili e $R$ \'e l'insieme dei valori che la funzione obiettivo pu\'o assumere.
 
-\section{Problemi in P e classi NP}
-Un problema di ottimizzazione è un problema in cui l'obiettivo è trovare la migliore soluzione possibile (in genere, la soluzione che massimizza o minimizza una certa funzione obiettivo). Ad esempio, il problema di trovare il percorso più breve in un grafo da un nodo sorgente a un nodo destinazione è un problema di ottimizzazione, in quanto l'obiettivo è trovare il percorso più breve.
 
-La classe P (dall'inglese Polynomial time) è l'insieme dei problemi di decisione che possono essere risolti da un algoritmo in tempo polinomiale, cioè in un tempo che cresce al massimo come una potenza del grado del problema. Ad esempio, il problema di ordinare una lista di n numeri può essere risolto in tempo O(n log n), che è polinomiale.
+\section{La classe P}
 
-La classe NP (dall'inglese Non-deterministic Polynomial time) è l'insieme dei problemi di decisione per i quali un'istanza positiva può essere verificata in tempo polinomiale da una macchina di Turing non deterministica. In altre parole, se esiste una soluzione per un problema in NP, allora può essere trovata in un tempo polinomiale. Tuttavia, non è noto se tutti i problemi in NP possano essere risolti in tempo polinomiale da una macchina di Turing deterministica.
+Dato un problema di ottimizzazione $R$, diciamo che questo appartiene
+alla classe P se esiste un algoritmo $A$ di complessit\'a polinomiale che
+lo risolve.
 
-Molti problemi pratici di ottimizzazione, come il problema del commesso viaggiatore e il problema dello zaino, sono NP-completi, il che significa che sono tra i problemi più difficili in NP. Sebbene non si conoscano algoritmi efficienti per risolverli, esistono algoritmi approssimati che forniscono soluzioni vicine all'ottimo in un tempo ragionevole.
+Alcuni esempi di problemi in P sono:
+\begin{itemize}
+  \item \textbf{SHORT PATH}: dato un grafo $G = (V, E)$, un nodo $s \in V$ e un nodo $t \in V$, trovare il cammino pi\'u breve da $s$ a $t$.
+  \item \textbf{MST}: dato un grafo $G = (V, E)$, trovare un albero di copertura minimo. 
+\end{itemize}
+
+
+\section{La classe NP}
+
+La classe NP contiene tutti i problemi di ottimizzazione per i quali, 
+nota la soluzione ottima, \'e possibile calcolarlo in tempo polinomiale.
+
+Alcuni esempi di problemi in NP sono:
+\begin{itemize}
+  \item \textbf{CLIQUE}: dato un grafo $G = (V, E)$ e un intero $k$, trovare un sottoinsieme di $k$ nodi di $V$ che formano un grafo completo.
+  \item \textbf{TSP}: dato un grafo $G = (V, E)$, trovare un ciclo hamiltoniano di costo minimo.
+\end{itemize}
+
+
+\section{La classe NP-completi}
+
+Un problema $R$ \'e NP-completo se:
+\begin{itemize}
+  \item $R \in NP$
+\item $\forall Q \in NP \exists $ riduzione polinomiale di $Q$ in $R$
+\end{itemize}
+
+Esempi di problemi NP-completi sono:
+\begin{itemize}
+  \item \textbf{CLIQUE}: dato un grafo $G = (V, E)$ e un intero $k$, trovare un sottoinsieme di $k$ nodi di $V$ che formano un grafo completo.
+  \item \textbf{TSP}: dato un grafo $G = (V, E)$, trovare un ciclo hamiltoniano di costo minimo.
+  \item \textbf{KNAPSACK}: dato un insieme di $n$ oggetti, ognuno con un peso $w_i$ e un valore $v_i$, e un intero $W$, trovare un sottoinsieme di oggetti che non superi il peso $W$ e che massimizzi il valore totale.
+\end{itemize}
+

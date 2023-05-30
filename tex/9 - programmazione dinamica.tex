@@ -1,15 +1,21 @@
 \chapter{Programmazione dinamica}
 
+La programmazione dinamica \`e applicabile a problemi che rispettano:
+\begin{itemize}
+  \item Il problema pu\`o essere suddiviso in sottoproblemi pi\`u piccoli.
+  \item In ogni sotto blocco $k$, con $k = 1, \dots, n$, ci si trova in uno degli stati
+        possibili $S_k$.
+  \item In ogni blocco si deve prendere una decisione $d_k$ che appartiene al dominio
+        delle decisioni $D_k$.
+\end{itemize}
 
-La programmazione dinamica è una tecnica di risoluzione di problemi che prevede di suddividere il problema in sottoproblemi più piccoli, risolvibili in modo indipendente, e di combinare le soluzioni dei sottoproblemi per ottenere la soluzione del problema originale.
+In ogni blocco $k$ si ha che la funzione obiettivo $f_k$ \'e $u(d_k, s_k)$
 
-L'approccio si basa sulla costruzione di una tabella in cui le righe rappresentano i sottoproblemi e le colonne rappresentano i valori possibili delle variabili di stato. La tabella viene costruita in modo iterativo, partendo dai casi base e utilizzando i risultati dei sottoproblemi per riempire le celle della tabella.
+Se in un momento mi trovo nel blocco $k$ con decisione $d_k$ e stato $s_k$, posso passare allo stato successivo
+$s_{k+1} = t(d_k, s_k)$ dove la funzione di transizione $t$ \'e definita come funzione di transizione.
 
-Il valore della soluzione ottima viene calcolato all'ultimo passaggio della tabella. L'uso della programmazione dinamica è particolarmente utile quando ci sono sovrapposizioni tra i sottoproblemi, cioè quando un sottoproblema viene risolto più volte.
 
-La complessità della programmazione dinamica dipende dal numero di sottoproblemi e dal tempo necessario per risolvere ciascun sottoproblema. In alcuni casi, la tecnica può essere migliorata utilizzando la memoization, ovvero memorizzando i risultati dei sottoproblemi già risolti per evitare di ricalcolarli ogni volta.
 
-In generale, la programmazione dinamica viene utilizzata per risolvere problemi di ottimizzazione in cui la soluzione ottima dipende dalla combinazione di un insieme di decisioni. Tra i problemi risolvibili con la programmazione dinamica si annoverano il problema dello zaino, il problema del commesso viaggiatore e il problema della catena di Markov.
 
 \section{Il principio di ottimalità}
 Il principio di ottimalità è un concetto fondamentale della programmazione dinamica. Esso afferma che una soluzione ottima a un problema di ottimizzazione globale può essere costruita attraverso le soluzioni ottime dei suoi sotto-problemi. In altre parole, se un problema può essere suddiviso in sotto-problemi più piccoli, la soluzione ottima del problema globale può essere ottenuta combinando le soluzioni ottime dei suoi sotto-problemi.
@@ -109,5 +115,6 @@ Dati:
     \item Una disponibilità $d_j$ per ogni risorsa $r_j$.
 \end{itemize}
 Obiettivo: Trovare un assegnamento delle attività alle risorse che minimizzi il tempo totale di completamento.
+
 
 Il problema della schedulazione può essere formulato in diverse varianti, come ad esempio il problema della schedulazione su una singola macchina o il problema della schedulazione su più macchine. In generale, il problema è considerato \textit{NP-hard}, il che significa che non esiste un algoritmo efficiente in grado di risolverlo in tempo polinomiale per tutti i casi.
