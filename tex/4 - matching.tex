@@ -1,2 +1,36 @@
 
 \chapter{Matching}
+
+\section{Algoritmo}
+
+
+\textbf{Algoritmo Ungherese (Kuhn-Munkres) per il Matching}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Matrice dei costi $C$}
+\KwOut{Matching massimo}
+
+Inizializza una matrice ausiliaria $M$ delle dimensioni della matrice dei costi $C$ con tutti gli elementi inizializzati a $0$\;
+
+\While{Non è stato trovato un matching massimo}{
+  Trova un cammino aumentante nella matrice dei costi $C$\;
+  \If{Il cammino aumentante non esiste}{
+    Termina l'algoritmo e restituisci il matching corrente\;
+  }
+  \Else{
+    Aggiorna il matching $M$ tramite il cammino aumentante\;
+  }
+}
+
+\Return{Matching massimo $M$}\;
+\caption{Algoritmo Ungherese (Kuhn-Munkres)}
+\end{algorithm}
+
+L'algoritmo ungherese è utilizzato per trovare il matching massimo in un grafo bipartito completo. La matrice dei costi $C$ rappresenta i costi associati agli archi del grafo, dove $C[i][j]$ rappresenta il costo dell'arco tra il nodo $i$ del primo insieme e il nodo $j$ del secondo insieme. L'algoritmo opera sulla matrice ausiliaria $M$, che tiene traccia degli archi selezionati nel matching.
+
+L'algoritmo procede iterativamente, cercando un cammino aumentante nella matrice dei costi. Un cammino aumentante è un cammino alternante che parte da un nodo libero nel primo insieme, passa attraverso un arco non selezionato, e arriva a un nodo libero nel secondo insieme. Se un cammino aumentante viene trovato, l'algoritmo aggiorna il matching selezionando gli archi del cammino aumentante e rimuovendo gli archi alternativi. Se non viene trovato un cammino aumentante, l'algoritmo termina e restituisce il matching massimo corrente.
+
+L'algoritmo ungherese garantisce la ricerca del matching massimo in un grafo bipartito completo con complessità di tempo $O(n^3)$, dove $n$ è la dimensione del grafo.
+
+Spero che questa spiegazione formattata in LaTeX sia stata utile! Se hai ulteriori domande, non esitare a chiedere.

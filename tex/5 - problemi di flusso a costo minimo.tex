@@ -1,83 +1,111 @@
 \chapter{Problemi di flusso}
+\section{Algoritmo di Ford-Fulkerson}
 
-\section{Classificazione dei nodi}
-\begin{itemize}
-  \item \textbf{Sorgente:} Nodo che ha solo archi uscenti
-  \item \textbf{Destinazione:} Nodo che ha solo archi entranti
-  \item \textbf{Nodo intermedio:} Nodo che ha sia archi entranti che uscenti
-\end{itemize}
+Per risolvere un problema di flusso, si utilizza l'algoritmo di Ford-Fulkerson, che è uno dei principali algoritmi per trovare il flusso massimo in una rete. Ecco una spiegazione dell'algoritmo di Ford-Fulkerson:
 
-\section{Problema di flusso a costo minimo}
-Far arrivare il prodotto dalla sorgente alla destinazione con il costo minimo.
+\textbf{Algoritmo di Ford-Fulkerson per il Flusso Massimo}
 
-\section{Soluzione di base}
-Si ottiene ponendo a $0$ il flusso di tutti gli archi che fanno parte dell'albero di supporto.
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Grafo di rete $G$, nodo di origine $s$, nodo di destinazione $t$}
+\KwOut{Flusso massimo nella rete}
 
-\section{Ammissibilit\`a e degenerazione}
-\begin{itemize}
-  \item \textbf{Ammissibilit\`a:} Se i flussi in base hanno valore \textbf{non negativo}
-  \item \textbf{Degenerazione:} Se i flussi in base hanno valore \textbf{nullo}
-\end{itemize}
+Inizializza un flusso $f(u, v) = 0$ per ogni arco $(u, v)$ nel grafo\;
 
+\While{Esiste un cammino $p$ da $s$ a $t$ nel grafo residuo $G_f$}{
+  Calcola la capacità residua minima $c_f(p)$ del cammino $p$\;
+  Aggiorna il flusso $f(u, v)$ su ogni arco $(u, v)$ del cammino $p$ aggiungendo $c_f(p)$ al flusso\;
+  Aggiorna il flusso residuo $f(u, v)$ e il flusso inverso $f(v, u)$ sui rispettivi archi $(u, v)$ e $(v, u)$ nel grafo\;
+}
 
-\section{Coefficiente di costo ridotto}
-Il \textbf{coefficiente di costo ridotto} misura la variazione del valore dell'obiettivo al crescere dell'unit\`a del valore del flusso su un arco fuori base.
+\Return{Il flusso massimo nella rete}\;
+\caption{Algoritmo di Ford-Fulkerson}
+\end{algorithm}
 
-\section{Condizione di ottimalit\`a}
-Se i coefficienti di consto ridotto degli archi fuori base sono non negativi, la soluzione di base \`e ottima.
+L'algoritmo di Ford-Fulkerson opera su una rete di flusso, che è rappresentata da un grafo diretto in cui gli archi hanno una capacità massima di flusso. L'algoritmo cerca iterativamente un cammino da $s$ (nodo di origine) a $t$ (nodo di destinazione) nel grafo residuo, che è il grafo originale con i flussi correnti sottratti dalle capacità degli archi. Se viene trovato un cammino, l'algoritmo determina la capacità residua minima lungo quel cammino e incrementa il flusso su ogni arco del cammino in base a questa capacità residua minima. Questo processo continua fino a quando non esistono più cammini da $s$ a $t$ nel grafo residuo.
 
+L'algoritmo di Ford-Fulkerson restituisce il flusso massimo nella rete una volta che non ci sono più cammini da $s$ a $t$ nel grafo residuo. È importante notare che l'algoritmo può richiedere più di una singola esecuzione per ottenere il flusso massimo, poiché può esistere più di un cammino da $s$ a $t$ con capacità residua non utilizzata.
 
-\subsection{Calcolo del coefficiente di costo ridotto}
-\begin{enumerate}
-  \item Prendo un arco fuori base
-  \item Aggiungo l'arco all'albero di supporto
-  \item Considero l'unico ciclo che si \`e formato
-  \item Fisso il verso del ciclo come il verso del'arco fuori base che ho aggiunto
-  \item Calcolo il coefficiente di costo ridotto facendo una somma algebrica di tutti gli archi del ciclo, sommando se l'arco che si attraversa ha direzioen concorde con l'arco fuori base inserito, sottraendo altrimenti.
-\end{enumerate}
+Esistono diverse varianti e miglioramenti dell'algoritmo di Ford-Fulkerson, come l'algoritmo di Edmonds-Karp che utilizza la ricerca in ampiezza per trovare il cammino più corto nel grafo residuo. Altri algoritmi noti per il flusso massimo includono l'algoritmo di Dinic e l'algoritmo di Push-Relabel.
 
-
-\section{Condizione di illimitatezza}
-Se l'aggiunta di un'arco fuori base crea un ciclo di costo negativo, il problema \`e illimitato.
-
-
-\section{Cambio di base}
-Se le condizioni di ottimalit\`a e illimitatezza non sono soddisfatte, \`e necessario cambiare base.
-
-Si procede togliendo un arco dalla base e aggiungendone un altro.
-
-Per aggiungere un arco in base, bisogna scegliere un arco fuori base che abbia coefficiente di costo ridotto negativo.
-
-\subsection{Aggionamento dei flussi}
-\begin{enumerate}
-  \item Aggiungo l'arco in base
-  \item Si forma il ciclo secondo il verso dell'arco fuori base
-  \item Porto a $\Delta$ il flusso dell'arco fuori base
-  \item Aumento di $$\Delta$$ il flusso degli archi che hanno verso concorde con l'arco fuori base
-  \item Diminuisco di $$\Delta$$ il flusso degli archi che hanno verso opposto all'arco fuori base
-\end{enumerate}
+Spero che questa spiegazione sia stata utile! Se hai ulteriori domande, non esitare a chiedere.
 
 
 
-\section{Algoritmo del simplesso su rete}
-L'algoritmo del simplesso su rete \`e un algoritmo per risolvere il problema di flusso a costo minimo.
+% \chapter{Problemi di flusso}
+%
+% \section{Classificazione dei nodi}
+% \begin{itemize}
+%   \item \textbf{Sorgente:} Nodo che ha solo archi uscenti
+%   \item \textbf{Destinazione:} Nodo che ha solo archi entranti
+%   \item \textbf{Nodo intermedio:} Nodo che ha sia archi entranti che uscenti
+% \end{itemize}
+%
+% \section{Problema di flusso a costo minimo}
+% Far arrivare il prodotto dalla sorgente alla destinazione con il costo minimo.
+%
+% \section{Soluzione di base}
+% Si ottiene ponendo a $0$ il flusso di tutti gli archi che fanno parte dell'albero di supporto.
+%
+% \section{Ammissibilit\`a e degenerazione}
+% \begin{itemize}
+%   \item \textbf{Ammissibilit\`a:} Se i flussi in base hanno valore \textbf{non negativo}
+%   \item \textbf{Degenerazione:} Se i flussi in base hanno valore \textbf{nullo}
+% \end{itemize}
+%
+%
+% \section{Coefficiente di costo ridotto}
+% Il \textbf{coefficiente di costo ridotto} misura la variazione del valore dell'obiettivo al crescere dell'unit\`a del valore del flusso su un arco fuori base.
+%
+% \section{Condizione di ottimalit\`a}
+% Se i coefficienti di consto ridotto degli archi fuori base sono non negativi, la soluzione di base \`e ottima.
+%
+%
+% \subsection{Calcolo del coefficiente di costo ridotto}
+% \begin{enumerate}
+%   \item Prendo un arco fuori base
+%   \item Aggiungo l'arco all'albero di supporto
+%   \item Considero l'unico ciclo che si \`e formato
+%   \item Fisso il verso del ciclo come il verso del'arco fuori base che ho aggiunto
+%   \item Calcolo il coefficiente di costo ridotto facendo una somma algebrica di tutti gli archi del ciclo, sommando se l'arco che si attraversa ha direzioen concorde con l'arco fuori base inserito, sottraendo altrimenti.
+% \end{enumerate}
+%
+%
+% \section{Condizione di illimitatezza}
+% Se l'aggiunta di un'arco fuori base crea un ciclo di costo negativo, il problema \`e illimitato.
+%
+%
+% \section{Cambio di base}
+% Se le condizioni di ottimalit\`a e illimitatezza non sono soddisfatte, \`e necessario cambiare base.
+%
+% Si procede togliendo un arco dalla base e aggiungendone un altro.
+%
+% Per aggiungere un arco in base, bisogna scegliere un arco fuori base che abbia coefficiente di costo ridotto negativo.
+%
+% \subsection{Aggionamento dei flussi}
+% \begin{enumerate}
+%   \item Aggiungo l'arco in base
+%   \item Si forma il ciclo secondo il verso dell'arco fuori base
+%   \item Porto a $\Delta$ il flusso dell'arco fuori base
+%   \item Aumento di $$\Delta$$ il flusso degli archi che hanno verso concorde con l'arco fuori base
+%   \item Diminuisco di $$\Delta$$ il flusso degli archi che hanno verso opposto all'arco fuori base
+% \end{enumerate}
+%
+%
+%
+% \section{Algoritmo del simplesso su rete}
+% L'algoritmo del simplesso su rete \`e un algoritmo per risolvere il problema di flusso a costo minimo.
+%
+% Itera il cambio di base finch\`e non trova una soluzione ottima.
+%
+% \begin{enumerate}
+%   \item Verifica di ottimalit\`a
+%   \item Verifica di illimitatezza
+%   \item Cambio di base
+% \end{enumerate}
 
-Itera il cambio di base finch\`e non trova una soluzione ottima.
-
-\begin{enumerate}
-  \item Verifica di ottimalit\`a
-  \item Verifica di illimitatezza
-  \item Cambio di base
-\end{enumerate}
 
 
-
-\section{Problema del taglio minimo}
-\subsection{Definizione}
-Il problema del taglio minimo consiste nel trovare il taglio di costo minimo che separa la sorgente dal pozzo in una rete di flusso.
-
-\subsection{Algoritmo - Ford-Fulkerson}
-DA RIFARE
 
 % \section{Problema di flusso massimo}
 %
