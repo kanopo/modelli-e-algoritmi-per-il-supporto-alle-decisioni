@@ -193,30 +193,33 @@ Quindi, la complessità complessiva dell'algoritmo greedy per MST è $O(n + m \l
   \section{Algoritmo di Floyd-Warshall}
   Percorso minimo tra tutti i nodi del grafo(grafo con pesi anche negativi).
 
-  DA RIFARE
 
-%   \begin{enumerate}
-%     \item Inizializziamo una matrice di dimensioni N x N, dove N è il numero di nodi nel grafo. Chiamiamo questa matrice "dist" e inizializziamo i suoi valori con i pesi degli archi del grafo. Se non esiste un arco tra due nodi, il valore corrispondente nella matrice sarà infinito.
-%     \item Per ogni nodo nel grafo, impostiamo la distanza da se stesso a 0 nella matrice "dist".
-%     \item Eseguiamo un triplo ciclo for per tutti i nodi del grafo. Il primo ciclo indica il nodo intermedio che stiamo considerando per il calcolo dei cammini minimi.
-%     \item All'interno del triplo ciclo for, confrontiamo la distanza tra il nodo di partenza e il nodo di destinazione attraverso il nodo intermedio con la distanza attuale tra il nodo di partenza e il nodo di destinazione. Se la distanza attraverso il nodo intermedio è minore, aggiorniamo il valore corrispondente nella matrice "dist".
-%     \item Alla fine dell'algoritmo, la matrice "dist" conterrà le distanze minime tra tutti i nodi del grafo.
-%     \item Possiamo utilizzare la matrice "dist" per determinare i cammini minimi tra tutti i nodi del grafo. Inoltre, possiamo individuare cicli negativi nel grafo verificando se un valore diagonale nella matrice "dist" è negativo.
-%   \end{enumerate}
-%
-% L'algoritmo di Floyd-Warshall è efficiente per grafi di piccole dimensioni, poiché richiede un tempo di esecuzione di $O(N^3)$, dove $N$ è il numero di nodi nel grafo. Tuttavia, può diventare inefficiente per grafi di grandi dimensioni a causa della complessità cubica.
-%
-% \section{Shortest path}
-%
-% Nei problemi di cammino a costo minimo, dadto un grafo $G=(V,A)$ con costo (distanza) $d_{ij}$ per ogni 
-% $(i, j) \in A$ e dati due nodi $s, t \in V$ dove i due nodi sono diversi fra di loro, vogliamo individuare un cammino
-% elementare orientato da $s$ a $t$ di costo minomo.
-%
-% \subsection{Algoritmo di Dijkstra}
-% Valido solo se $d_{ij} \geq 0 \forall (i, j) \in A$.
-% Restituisce i cammini minimi tra un nodo scelto $s \in V$ e tutti gli altri nodi.
-%
-% \subsection{Algoritmo di Floyd-Warshall}
-% Valido anche per distanze negative a patto che non siano presenti cicli a costo negativo(in questo caso restituisce un ciclo a costo negativo).
-%
-%
+
+\begin{algorithm}[H]
+\SetAlgoLined
+\KwIn{Matrice dei pesi $W$}
+\KwOut{Matrice delle distanze minime $D$}
+
+Inizializza la matrice delle distanze minime $D$ con i valori della matrice dei pesi $W$\;
+
+\For{$k$ da $1$ a $n$}{
+  \For{$i$ da $1$ a $n$}{
+    \For{$j$ da $1$ a $n$}{
+      $D[i][j] \leftarrow \min(D[i][j], D[i][k] + D[k][j])$\;
+    }
+  }
+}
+
+\Return{Matrice delle distanze minime $D$}\;
+\caption{Algoritmo di Floyd-Warshall}
+\end{algorithm}
+
+L'algoritmo di Floyd-Warshall viene utilizzato per trovare i cammini minimi tra tutte le coppie di nodi in un grafo pesato, anche se ci sono archi con pesi negativi. L'algoritmo opera utilizzando una matrice delle distanze minime $D$, in cui $D[i][j]$ rappresenta la distanza minima tra il nodo $i$ e il nodo $j$. La matrice dei pesi $W$ contiene i pesi degli archi del grafo.
+
+L'algoritmo procede iterativamente aggiornando i valori della matrice delle distanze minime $D$. In ogni iterazione, viene selezionato un nodo $k$ come possibile nodo intermedio nel cammino da $i$ a $j$. L'algoritmo confronta la distanza minima esistente tra $i$ e $j$ con la somma delle distanze minime tra $i$ e $k$ e tra $k$ e $j$. Se la somma delle distanze minime è inferiore alla distanza minima esistente, la distanza minima viene aggiornata.
+
+L'algoritmo di Floyd-Warshall continua ad aggiornare le distanze minime per tutte le coppie di nodi utilizzando tutti i possibili nodi intermedi $k$. Alla fine delle iterazioni, la matrice delle distanze minime $D$ conterrà le distanze minime tra tutte le coppie di nodi nel grafo.
+
+L'algoritmo di Floyd-Warshall ha una complessità di tempo di $O(n^3)$, dove $n$ è il numero di nodi nel grafo. Può essere utilizzato per risolvere problemi come la determinazione del cammino più breve tra due nodi o la rilevazione di cicli negativi nel grafo.
+
+Spero che questa spiegazione dell'algoritmo di Floyd-Warshall sia stata utile! Se hai ulteriori domande, non esitare a chiedere.

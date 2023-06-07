@@ -1,3 +1,14 @@
 # Modelli e algoritmi per il supporto alle decisioni
 
-riassunti di una materia bella reasa orribile da un prof non abile all'insegnamento
+## Argomenti
+- [ ] Algoritmi
+    - [ ] branch and boud per knapsack
+    - [ ] MST-1
+    - [ ] MST-2
+    - [ ] Ford-Fulkerson
+    - [ ] Floid-Warshal
+    - [ ] Dijkstra
+    - [ ] Simplesso
+    - [ ] Ungherese 
+
+
