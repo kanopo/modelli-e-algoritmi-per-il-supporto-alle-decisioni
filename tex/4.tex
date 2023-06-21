@@ -1,3 +1,53 @@
 
 \chapter{Matching}
 
+\section{Definizioni}
+Il matching, nell'ambito della teoria dei grafi, è un concetto che si applica ai grafi bipartiti. Un matching in un grafo bipartito è un sottoinsieme degli archi del grafo tale che nessun paio di archi nel matching condivida lo stesso nodo di partenza o di arrivo. In altre parole, un matching è un insieme di archi che non si sovrappongono tra loro.
+
+Formalmente, dato un grafo bipartito $G = (V, E)$ con partizione dei nodi in due insiemi disgiunti $V_1$ e $V_2$, un matching $M$ in $G$ è un sottoinsieme di $E$ tale che per ogni coppia di archi $e_1, e_2 \in M$, i nodi di partenza o di arrivo di $e_1$ e $e_2$ non coincidano.
+
+
+\section{Matching di peso massimo}
+Il "matching di peso massimo" è un tipo particolare di matching in cui ogni arco ha un peso associato e l'obiettivo è trovare un matching che massimizzi la somma dei pesi degli archi selezionati.
+
+Formalmente, dato un grafo bipartito ponderato $G = (V, E, w)$ con partizione dei nodi in due insiemi disgiunti $V_1$ e $V_2$, dove $w: E \rightarrow \mathbb{R}$ è una funzione che assegna un peso reale a ogni arco, il matching di peso massimo è un sottoinsieme $M \subseteq E$ tale che la somma dei pesi degli archi in $M$ sia massima rispetto a tutti gli altri matching possibili in $G$.
+
+\section{Metching di cardinalità massima}
+Questo \`e un tipo particolare di matching in cui ogni arco ha un peso \textbf{unitario} associato e l'obiettivo \`e trovare un matching che massimizzi il numero di archi selezionati.
+
+\section{Matching initale}
+Il "matching iniziale" è un concetto che si applica alla ricerca di un matching in un grafo bipartito. Indica un sottoinsieme di archi che viene selezionato come punto di partenza per l'algoritmo di ricerca del matching ottimale.
+
+Si ponga $M = \emptyset$.
+
+\begin{enumerate}
+  \item Se esiste un arco $e \in A \setminus M$ che non sia adiacente ad alcun arco in $M$, allora porre $M = M \cup \{e\}$ e ripetere il passo 1.
+  \item Altrimenti: STOP.
+\end{enumerate}
+
+\section{Algoritmo con nome non specificato dal prof :(}
+Sia $M$ un matching di partenza (eventualmente individuato con la procedura vista).
+
+\textbf{Passo 0:} Tutti i vertici del grafo sono non etichettati.
+
+\textbf{Passo 1:} Se non c'è alcun vertice del grafo in $V_1$ che soddisfa le seguenti proprietà:
+\begin{itemize}
+  \item È non etichettato.
+  \item Su di esso non incide alcun arco in $M$.
+\end{itemize}
+Allora: STOP. Altrimenti, si seleziona un vertice del grafo in $V_1$ con tali proprietà e gli si assegna l'etichetta $(E, -)$. Si inizializza l'insieme $R$ dei vertici analizzati con $R = \emptyset$.
+
+\textbf{Passo 2:} Se tutti i vertici etichettati sono stati analizzati, si ritorna al Passo 1. Altrimenti, si seleziona un vertice $k$ etichettato ma non analizzato ed lo si analizza, cioè si pone $R = R \cup \{k\}$. Analizzare un vertice significa compiere le seguenti operazioni:
+\begin{enumerate}
+  \item[a)] Se la prima componente dell'etichetta di $k$ è una $E$, allora si assegna un'etichetta $(O, k)$ a tutti i vertici del grafo adiacenti a $k$ e non ancora etichettati. Quindi si ripete il Passo 2.
+  \item[b)] Se la prima componente dell'etichetta di $k$ è una $O$, allora sono possibili due casi:
+    \begin{itemize}
+      \item \textbf{Caso 1:} C'è un arco marcato incidente su $k$. In tal caso, si assegna l'etichetta $(E, k)$ al vertice unito a $k$ dall'arco in $M$ e si ripete il Passo 2.
+      \item \textbf{Caso 2:} Non ci sono archi in $M$ incidenti su $k$. In tal caso, si passa al Passo 3.
+    \end{itemize}
+\end{enumerate}
+
+\textbf{Passo 3:} Utilizzando la seconda componente delle etichette, si risale dal vertice $k$ in cui ci si è bloccati al Passo 2 fino al vertice $s$ con seconda componente pari a $-$. In questo modo si individua un cammino da $s$ a $k$ che inizia con un arco non appartenente a $M$, prosegue alternando archi in $M$ e archi non appartenenti a $M$, e termina in $k$ con un arco non appartenente a $M$. A questo punto, si aggiorna $M$ invertendo l'appartenenza e non appartenenza a $M$ per i soli archi lungo tale cammino. Quindi, tutti gli archi non appartenenti a $M$ lungo il cammino vengono inseriti in $M$ e viceversa. Infine, si cancellano tutte le etichette ripartendo dal Passo 1.
+
+\subsection{Complessità}
+$O(|V|^{\frac{1}{2}}|A|)$
