@@ -1,0 +1,50 @@
+\chapter{Minimum Spanning Tree}
+
+AKA Alberi di supporto a peso minimo.
+
+\section{Algoritmo greedy}
+L'algoritmo Greedy per il Minimum Spanning Tree (MST) è un algoritmo che trova il sottoinsieme di archi di peso minimo che connette tutti i nodi di un grafo non orientato. L'algoritmo si basa sull'idea di selezionare ripetutamente l'arco di peso minimo tra due nodi che non siano ancora collegati.
+
+\subsection{Passi dell'algoritmo}
+
+\begin{enumerate}
+  \item Inizializzare l'MST come un insieme vuoto di archi.
+  \item Ordinare gli archi del grafo in ordine crescente di peso.
+  \item Selezionare l'arco di peso minimo e controllare se collega due nodi diversi nell'MST corrente. Se sì, aggiungerlo all'MST.
+  \item Ripetere il passo precedente fino a quando tutti i nodi non sono connessi nell'MST.
+\end{enumerate}
+
+\subsection{Pseudocodice}
+
+Ecco il pseudocodice dell'algoritmo Greedy per MST:
+
+\begin{verbatim}
+GreedyMST(G):
+  MST = {} // Inizializza l'MST come un insieme vuoto di archi
+  Ordina gli archi di G in ordine crescente di peso
+  Per ogni arco (u, v) in G:
+    Se u e v non sono nello stesso componente connesso di MST:
+      Aggiungi (u, v) all'MST
+      Unisci i componenti connessi di u e v in MST
+  Ritorna MST
+\end{verbatim}
+
+\subsection{Complessità}
+L'algoritmo Greedy per MST ha una complessità temporale di $O(E \log E)$, dove $E$ è il numero di archi nel grafo.
+
+\subsection{Correttezza}
+L'algoritmo Greedy per MST è basato sull'idea di selezionare ripetutamente l'arco di peso minimo tra due nodi che non siano ancora collegati nell'MST corrente. L'obiettivo dell'algoritmo è quello di costruire un MST che connetta tutti i nodi del grafo, utilizzando gli archi di peso minimo possibili.
+
+La correttezza dell'algoritmo può essere dimostrata utilizzando l'argomento del sottografo in espansione. Inizialmente, l'MST è un insieme vuoto di archi. Ad ogni passo, l'algoritmo seleziona l'arco di peso minimo che collega due nodi diversi nell'MST corrente. Questo arco viene aggiunto all'MST, espandendo così il sottografo. L'algoritmo continua a selezionare e aggiungere gli archi di peso minimo fino a quando tutti i nodi non sono connessi nell'MST.
+
+La dimostrazione della correttezza si basa su due proprietà fondamentali:
+
+\begin{enumerate}
+\item L'arco di peso minimo tra due nodi che non sono ancora collegati nell'MST corrente è sicuramente parte del MST finale. Questo perché, se ci fosse un MST diverso che non contiene quell'arco, potremmo sostituire un arco nell'MST con l'arco di peso minimo per ottenere un MST con un peso minore, il che contraddice l'ipotesi che l'MST sia il più leggero possibile.
+\item L'aggiunta di un arco all'MST non crea cicli. Questo perché l'algoritmo controlla se i due nodi dell'arco selezionato sono già connessi nello stesso componente connesso dell'MST. Se fossero già connessi, l'aggiunta di quell'arco creerebbe un ciclo nel grafo, quindi l'arco non viene aggiunto.
+\end{enumerate}
+
+Basandosi su queste proprietà, l'algoritmo Greedy per MST seleziona e aggiunge gli archi di peso minimo in modo che l'MST risultante sia un albero senza cicli che connette tutti i nodi del grafo originale. Pertanto, l'algoritmo produce un MST corretto per il grafo di input.
+
+
+
