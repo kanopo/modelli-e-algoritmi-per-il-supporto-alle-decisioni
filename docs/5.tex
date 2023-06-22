@@ -1,0 +1,188 @@
+\chapter{Flusso}
+
+\section{Problemi di flusso a costo minimo}
+
+\subsection{Ammissibilit\`a e degenerazione}
+
+Se i flussi associati agli archi in base hanno valore \textbf{non negativo},
+si parla di \textbf{soluzione ammissibile}.
+
+
+Se uno o pi\`u flussi associati agli archi in base hanno valore \textbf{nullo},
+si parla di \textbf{soluzione degenere}.
+
+
+\subsection{Coefficienti di costo ridotto}
+
+Ad ogni arco fuori base \`e assocaito un \textbf{coefficiente di costo ridotto} che misura
+la variazione del valore dell'obiettivo al crescere di una unit\`a del flusso associato all'arco fuori base.
+
+
+
+\subsection{Condizione di ottimalit\`a}
+Se i coefficienti di costo ridotto di tutti gli archi fuori base sono \textbf{non negativi},
+in tal caso la soluzione di base attuale \`e \textbf{ottima}.
+
+\subsubsection{Calcolo del costo ridotto}
+
+\begin{enumerate}
+  \item Prendere un arco fuori base.
+  \item Aggiungere l'arco all'albero di supporto corrispondente alla base attuale.
+  \item Considerare l'unico ciclo che si forma con tale aggiunta.
+  \item Fissare come verso del ciclo quello dell'arco fuori base.
+  \item Calcolare il coefficiente di costo ridotto sommando tra loro tutti i costi relativi agli archi attraversati dal ciclo nel loro stesso verso e sottraendo al risultato i costi degli archi attraversati dal ciclo in senso opposto.
+\end{enumerate}
+
+
+\subsection{Condizione di illimitatezza}
+Se l'aggiunta all'albero di supporto/base attuale di un arco fuori base con coefficiente di costo ridotto negativo crea un ciclo orientato, allora il problema di flusso a costo minimo ha obiettivo illimitato.
+
+
+\subsection{Cambio di base}
+
+Se le condizioni di ottimalit\`a e illimitatezza non sono soddisfatte si procede con il cambio di base
+scegliendo un'arco da inserire e un'arco da rimuovere dalla base.
+
+Per gli archi entranti in base bisogna scegliere quelli con coefficiente di costo ridotto negativo.
+
+\subsection{Algoritmo del simplesso su rete}
+Una volta completate le operazioni relative a una base e definita una nuova base, l'algoritmo del simplesso su rete ripete le operazioni appena viste sulla nuova base, cioè:
+
+
+
+\begin{enumerate}
+  \item Verifica di ottimalità.
+  \item Verifica di illimitatezza.
+  \item Cambio di base.
+\end{enumerate}
+
+E itera questo procedimento fino a quando arriva a una base che soddisfi la condizione di ottimalità o quella di illimitatezza.
+
+
+
+
+\section{Problemi di flusso massimo}
+Vogliamo determinare la quantità massima di flusso che
+partendo dal nodo sorgente si può far giungere fino al nodo
+destinazione, tenuto conto dei vincoli di capacità sugli archi
+e di quelli di equilibrio nei nodi intermedi.
+
+\subsection{Tagli nella rete}
+Considero $U \subset V$ dove $V$ rappresenta l'insieme dei vertici e aggiungo due propriet\`a:
+\begin{itemize}
+  \item $S \in U$, $S$ \`e il nodo sorgente
+  \item $D \not \in U$, $D$ \`e il nodo destinazione
+\end{itemize}
+
+Posso separare il grafo di partenza nei due insieme $U$ e $V \setminus U$.
+
+Il taglio \`e l'insieme degli archi che collegano i due insiemi.
+
+\section{Problema di taglio minimo}
+
+\subsection{Archi saturi}
+Supponiamo di avere un flusso ammissibile $X = (x_{ij})$ per cui sono soddisfatti i vincoli di equilibrio e quelli di capacità degli archi. Se $x_{ij} = c_{ij}$, diremo che l'arco $(i, j)$ è saturo.
+
+Dove con $c_{ij}$ si intende la capacità dell'arco $(i, j)$.
+
+
+\subsection{Cammini privi di archi saturi}
+Se un cammino dal nodo $S$ al nodo $D$ non presenta nessun arco saturo, il flusso $X$ non è ottimo.
+
+Possiamo aumentare il flusso lungo ciascun arco del cammino di una quantità $\Delta$ definita nel seguente modo:
+\[
+\Delta = \min_{i=0,...,r} \left[ c_{q_iq_{i+1}} - x_{q_iq_{i+1}} \right] > 0,
+\]
+senza violare i vincoli di capacità degli archi.
+
+Si noti anche che i vincoli di equilibrio continuano ad essere rispettati, poiché in ogni nodo intermedio del grafo facente parte del cammino, il flusso in entrata aumenta di $\Delta$, ma contemporaneamente aumenta anche il flusso in uscita di $\Delta$.
+
+
+\subsection{Grafo associato ad un flusso ammissibile}
+
+Definisco un nuovo grafo orientato $G(X) = (V, A(X))$.
+
+Il nuovo grafo ha gli stessi nodi della rete originaria e ha il seguente insieme di archi:
+
+\[
+A(X) = \{(i, j) : (i, j) \in A, x_{ij} < c_{ij}\} \cup \{(i, j) : (j, i) \in A, x_{ji} > 0\}
+\]
+
+L'insieme $A(X)$ contiene tutti gli archi di $A$ che non sono saturi (l'insieme $A_f(X)$, detto insieme degli archi forward) e tutti gli archi di $A$ lungo cui è stata inviata una quantità positiva di flusso, ma invertiti di verso (l'insieme $A_b(X)$, detto insieme degli archi backward).
+
+
+
+\begin{itemize}
+  \item Per gli archi \textbf{forward}, il valore $\alpha_{ij}$ rappresenta quanto flusso posso ancora inviare lungo l'arco $(i, j) \in A$ della rete originaria.
+  \item Per gli archi \textbf{backward}, il valore $\alpha_{ij}$ rappresenta quanto flusso posso rispedire indietro lungo l'arco $(j, i) \in A$ della rete originaria.
+\end{itemize}
+
+
+\subsection{Aggiornamento del flusso}
+Per prima cosa devo trovare il $\Delta$ di un cammino, si deve prendere il valore minore di un cammino.
+
+Dopo di che posso aggionrare il flusso con la seguente formula:
+\begin{align}
+  x_{ij} = 
+  \begin{cases}
+    x_{ij} + \Delta  \quad \text{se } (i, j) \in A_f(X) \cap P \\
+    x_{ij} - \Delta  \quad \text{se } (j, i) \in A_b(X) \cap P \\
+    x_{ij} \quad \text{altrimenti}
+  \end{cases}
+\end{align}
+
+
+L'aggiornamento del flusso garantisce che questo sia ancora ammissibile, cioè soddisfa i vincoli di non negatività delle variabili, i vincoli di capacità sugli archi e i vincoli di equilibrio nei nodi intermedi.
+
+Nella rete originaria, incrementiamo di $\Delta$ il flusso lungo gli archi corrispondenti ad archi forward del grafo associato al flusso attuale, appartenenti al cammino $P$. Rispediamo indietro $\Delta$ unità di flusso lungo gli archi che, cambiati di verso, corrispondono ad archi backward del grafo associato, appartenenti al cammino $P$, e quindi decrementiamo il flusso della stessa quantità lungo tali archi. Infine, lungo gli archi che non fanno parte del cammino $P$, il flusso rimane invariato.
+
+Il nuovo flusso è ammissibile e la quantità di flusso uscente da $S$ è anch'essa aumentata proprio della quantità $\Delta$, il che dimostra che il flusso precedente non era ottimo.
+
+
+\section{Algoritmo di Ford-Fulkerson per il flusso massimo}
+
+\subsection*{Passo 0 - Inizializzazione}
+È dato un flusso ammissibile iniziale $X$ (si noti che si può sempre partire con il flusso nullo $X = 0$).
+
+\subsection*{Passo 1}
+Si costruisca il grafo $G(X)$ associato al flusso attuale $X$.
+
+\subsection*{Passo 2}
+Se non esiste alcun cammino orientato da $S$ a $D$ in $G(X)$, allora STOP: il flusso attuale $X$ è ottimo.
+Altrimenti, si individui un tale cammino $P$ e si aggiorni il flusso $X$ come visto in precedenza e si ritorni al Passo 1.
+
+\section{Procedura di etichettatura}
+\subsection*{Passo 0}
+Si parta con un flusso ammissibile $X$. Si noti che è sempre possibile partire con il flusso nullo $X = 0$.
+
+\subsection*{Passo 1}
+Si associ alla sorgente $S$ l'etichetta $(S, \infty)$. L'insieme $R$ dei nodi analizzati è vuoto, ovvero $R = \emptyset$, mentre l'insieme $E$ dei nodi etichettati contiene il solo nodo $S$, ovvero $E = \{S\}$.
+
+\subsection*{Passo 2}
+Se $E \setminus R = \emptyset$, il flusso attuale $X$ è ottimo. Altrimenti, si selezioni un nodo $i \in E \setminus R$, cioè etichettato, con etichetta $(k, \Delta)$, ma non ancora analizzato, e lo si analizzi. Per ogni nodo $j \notin E$, cioè non ancora etichettato, e tale che $(i, j) \in A(X)$, si etichetti $j$ con la seguente etichetta:
+\begin{align}
+  (i, \min(\Delta, c_{ij} - x_{ij}))$ se $(i, j) \in A_f(X)\\
+  (i, \min(\Delta, x_{ji}))$ se $(i, j) \in A_b(X)
+\end{align}
+
+Quindi si ponga:
+\begin{align}
+  E &= E \cup \{j \notin E : (i, j) \in A(X)\} \\
+  R &= R \cup \{i\}
+\end{align}
+Se $D \in E$, cioè se la destinazione è stata etichettata, si vada al Passo 3, altrimenti si ripeta il Passo 2.
+
+\subsection*{Passo 3}
+Si ricostruisca un cammino orientato da $S$ a $D$ in $G(X)$ procedendo a ritroso da $D$ verso $S$ ed usando le prime componenti delle etichette. A questo punto il cammino trovato
+\begin{align}
+S \to q_1 \to \ldots \to q_{r-1} \to q_r \to D
+\end{align}
+con insieme di archi
+\begin{align}
+P = \{(S, q_1), \ldots, (q_{r-1}, q_r), (q_r, D)\}
+\end{align}
+è un cammino orientato da $S$ a $D$ in $G(X)$.
+Ora possiamo aggiornare $X$ come visto in precedenza, dove il valore $\Delta$ è dato dalla seconda componente dell'etichetta del nodo $D$, e ritornare al Passo 1.
+
+
+
