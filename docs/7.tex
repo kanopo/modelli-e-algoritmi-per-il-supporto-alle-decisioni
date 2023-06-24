@@ -1,0 +1,45 @@
+\chapter{Branch and Bound}
+
+L'algoritmo di Branch and Bound è un metodo di risoluzione esatto utilizzato per problemi di ottimizzazione, in cui si cerca di trovare la soluzione migliore tra un insieme di possibili soluzioni. L'algoritmo si basa sulla suddivisione del problema in sotto-problemi più piccoli, chiamati "branch", e sulla valutazione di limiti superiori e inferiori per determinare quali sotto-problemi esplorare ulteriormente.
+
+L'algoritmo di Branch and Bound può essere descritto in modo generico come segue:
+
+\begin{enumerate}
+\item Inizializzazione: Si parte da una soluzione iniziale e si calcola un lower bound e un upper bound per il problema.
+\item Esplorazione dei sotto-problemi: Si seleziona un sotto-problema da esplorare. Questo può essere fatto in base a una strategia specifica, come ad esempio la selezione del sotto-problema con l'upper bound più basso.
+\item Generazione dei sotto-problemi: Si generano i sotto-problemi a partire dal sotto-problema selezionato, suddividendo il problema originale in problemi più piccoli. Questo può essere fatto introducendo vincoli aggiuntivi o modificando i parametri del problema.
+\item Calcolo dei limiti superiori e inferiori: Per ogni sotto-problema generato, si calcolano i limiti superiori e inferiori. L'upper bound rappresenta un limite superiore per il valore ottimo del sotto-problema, mentre il lower bound rappresenta un limite inferiore.
+\item Pruning: Si eliminano i sotto-problemi che possono essere esclusi in base ai limiti superiori e inferiori calcolati. Se l'upper bound di un sotto-problema è inferiore al lower bound di un altro sotto-problema già esplorato, il primo sotto-problema può essere eliminato, poiché non può contenere una soluzione ottima.
+\item Aggiornamento della soluzione ottima: Durante l'esplorazione dei sotto-problemi, si tiene traccia della soluzione ottima finora trovata.
+\item Ripetizione: Si ripetono i passaggi 2-6 fino a quando non si esauriscono i sotto-pro
+\end{enumerate}
+
+\section{Upper bound}
+L'upper bound (limite superiore) è un valore che rappresenta un limite superiore per il valore ottimo del problema. In altre parole, è un valore che sicuramente non sarà inferiore alla soluzione ottima. L'upper bound viene utilizzato nell'algoritmo di Branch and Bound per determinare se un sotto-problema può essere eliminato o meno.
+
+L'upper bound \`e vincolato da due caratteristiche:
+\begin{itemize}
+  \item Tempi di calcolo molto inferiori rispetto ai tempi per la risoluzione del problema
+  \item Valore molto vicino al valore ottimo
+\end{itemize} 
+
+
+\subsection{Rilassamento}
+Il rilassamento è una tecnica utilizzata per semplificare un problema originale, allentando alcune restrizioni o parametri. Nel contesto dell'algoritmo di Branch and Bound, il rilassamento viene utilizzato per determinare un upper bound per il valore ottimo del problema, calcolando la soluzione di un problema rilassato.
+
+
+
+\section{Lower bound}
+
+Il lower bound (limite inferiore) è un valore che rappresenta un limite inferiore per il valore ottimo del problema. In altre parole, è un valore che sicuramente non sarà superiore alla soluzione ottima. Il lower bound viene utilizzato nell'algoritmo di Branch and Bound per determinare se un sotto-problema può essere eliminato o meno.
+
+
+\section{Branching}
+Il branching è un'operazione utilizzata nell'algoritmo di Branch and Bound per generare nuovi sotto-problemi da esplorare. L'operazione di branching consiste nel dividere un sotto-problema T in due o più sotto-problemi più piccoli, chiamati nodi figli o successori di T.
+Il branching viene utilizzato per esplorare in modo più efficiente lo spazio delle soluzioni del problema, generando sotto-problemi più piccoli e quindi più facili da risolvere. Inoltre, il branching viene utilizzato per eliminare i sotto-problemi che non possono contenere la soluzione ottima del problema.
+
+\subsection{Cancellazione di sotto-problemi}
+
+Se l'Upper bound del sottoproblema \`e inferiore o uguale al Lower bound attuale, viene scartato il sotto problema.
+
+

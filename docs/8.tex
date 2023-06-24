@@ -1,0 +1,63 @@
+\chapter{Problema dello zaino}
+
+\begin{enumerate}
+\item \textbf{Inizializzazione:} Si crea un nodo radice che rappresenta lo stato iniziale del problema, in cui nessun oggetto è ancora stato selezionato.
+
+\item \textbf{Calcolo dell'upper bound:} Si calcola l'upper bound per il nodo corrente utilizzando una procedura specifica. Questo valore rappresenta il massimo valore che può essere ottenuto selezionando gli oggetti rimanenti nello zaino.
+
+\item \textbf{Calcolo del lower bound:} Si calcola il lower bound per il nodo corrente utilizzando una procedura specifica. Questo valore rappresenta il minimo valore che può essere ottenuto selezionando gli oggetti rimanenti nello zaino.
+
+\item \textbf{Pruning:} Se l'upper bound del nodo corrente è inferiore al lower bound di un nodo già visitato, allora si può eliminare il nodo corrente e tutti i suoi sottoalberi, in quanto non porteranno a una soluzione ottima.
+
+\item \textbf{Espansione dei nodi:} Se l'upper bound del nodo corrente è maggiore o uguale al lower bound di un nodo già visitato, allora si espandono i nodi successivi generando tutti i possibili sottoinsiemi di oggetti che possono essere aggiunti allo zaino.
+
+\item \textbf{Aggiornamento dell'upper bound:} Durante l'espansione dei nodi, se si trova un sottoinsieme di oggetti che ha un valore superiore all'upper bound corrente, si aggiorna l'upper bound con il nuovo valore.
+
+\item \textbf{Selezione del prossimo nodo:} Si seleziona il prossimo nodo da esplorare in base a una strategia di selezione, come ad esempio il nodo con l'upper bound più alto.
+
+\item \textbf{Ripetizione dei passi 2-7:} Si ripetono i passi 2-7 fino a quando non si esplorano tutti i nodi o si trova una soluzione ottima.
+\end{enumerate}
+
+
+% Nel problema dello zaino si hanno come variabili:
+% \begin{itemize}
+%   \item capacità dello zaino $C$
+%   \item $n$ oggetti con peso $w_i$ e valore $v_i$
+% \end{itemize}
+%
+%
+%
+% \section{Upper bound}
+%
+% \begin{enumerate}
+% \item Si considera un sottinsieme di oggetti rimanenti che possono essere aggiunti allo zaino senza superare la sua capacità.
+%
+% \item Si calcola la somma dei valori di questi oggetti selezionati.
+%
+% \item Si aggiunge a questa somma il valore di eventuali oggetti parzialmente selezionati, che potrebbero essere aggiunti in frazioni.
+%
+% \item Si ottiene così l'upper bound, che rappresenta il massimo valore che può essere ottenuto selezionando gli oggetti rimanenti nello zaino.
+% \end{enumerate}
+%
+%
+% \section{Risoluzione del rilassamento lienare}
+%
+% \subsection{Ordinamento degli oggetti}
+% Gli oggetti devono essere ordinati in base al loro rapporto valore/peso in ordine non crescente.
+%
+% \begin{align}
+%   \frac{v_1}{w_1} \geq \frac{v_2}{w_2} \geq \dots \geq \frac{v_n}{w_n}
+% \end{align}
+%
+%
+% \subsection{Calcolo upper bound}
+%
+% Effettuo il calcolo dell'upper bound utilizzando la seguente formula:
+% \begin{align}
+%   C - \sum_{i=1}^{n} w_i
+% \end{align}
+%
+% In realta non si sottrae per tutti gli $n$ valori ma si continua ad iterare fintanto che la capacit\`a rimanente \`e maggiore del peso dell'oggetto corrente.
+%
+%
+%
